@@ -4,11 +4,12 @@ import {createRouter, createWebHistory} from "vue-router";
 import App from './App.vue'
 import GameView from "@/components/GameView";
 import Intro from '@/components/IntroView';
+import '@/plugin/socketPlugin';
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/intro',
+        { path: '/',
           component: Intro
         },
         { path: '/game',

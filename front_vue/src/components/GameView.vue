@@ -6,28 +6,31 @@
     <br>
     <label>Your Message</label>
     <input type="text" v-model="message"/>
-    <button class="md-primary md-raised" @click="sendMessage()">Submit</button>
+    <button class="md-primary md-raised" @click="sendMessage">Submit</button>
   </div>
 </template>
 
 <script>
 // eslint-disable-next-line no-unused-vars
 import GameData from '@/assets/game'
-import SocketioService from '../assets/socket';
+//import SocketioService from '../assets/socketPlugin';
 
 export default {
   name: "GameView",
   created() {
-    SocketioService.setupSocketConnection();
-    /*this.socket.on('chat', (data)=> {
+    /*SocketioService.setupSocketConnection();*/
+    /*this.socketPlugin.on('chat', (data)=> {
       this.textarea += data.message + "\n"
     })*/
-    /*SocketioService.socket.on('chat', (data) => {
+    /*SocketioService.socketPlugin.on('chat', (data) => {
       console.log(data);
     });*/
+    this.$socket.on('chat', (data) => {
+      this.textarea += data + '\n';
+    });
   },
   beforeUnmount() {
-    SocketioService.disconnect();
+    /*SocketioService.disconnect();*/
   },
   data() {
     return {
@@ -36,17 +39,19 @@ export default {
     }
   },
   methods: {
-    sendMessage () {
-      /*this.$socket.emit('chat',{
+    sendMessage(msg) {
+      /*this.$socketPlugin.emit('chat',{
         message: this.message
       });*/
-      SocketioService.socket.on("chat", (data) => {
+      /*SocketioService.socketPlugin.on("chat", (data) => {
         console.log(data);
         this.message = data;
         this.textarea += data + '\n';
-      });
-
+      });*/
+      this.message = msg;
+      this.textarea += this.message + '\n';
       this.message = ''
+      this.$sendMessage(msg);
     }
   }
 }

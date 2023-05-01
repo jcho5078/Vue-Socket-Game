@@ -1,10 +1,17 @@
 <template>
+  <img alt="Vue logo" src="../assets/logo.png">
+  <button @click="moveGame">Move to Game</button>
   <h2>Intro</h2>
 </template>
 
 <script>
 export default {
-  name: "IntroView"
+  name: "IntroView",
+  methods: {
+    moveGame(){
+      this.$router.push('/game');
+    }
+  }
 }
 </script>
 
