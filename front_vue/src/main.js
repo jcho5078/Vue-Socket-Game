@@ -16,8 +16,13 @@ const router = createRouter({
         }
     ]
 });
-
 const app = createApp(App)
 app.use(router);
+
+app.directive('auto-scroll', {
+    updated: el => {
+        el.scrollTop = el.scrollHeight;
+    }
+});
 
 app.mount('#app');

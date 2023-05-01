@@ -1,5 +1,8 @@
 import Phaser from 'phaser';
-import axios from "axios";
+//import axios from "axios";
+//import io from 'socket.io-client';
+// eslint-disable-next-line no-unused-vars
+//const socket = io(process.env.VUE_APP_SOCKET_ENDPOINT);
 
 class Bullet extends Phaser.Physics.Matter.Sprite
 {
@@ -154,7 +157,12 @@ class Stop extends Phaser.Scene {
      * 로그인 시도
      */
     login(){
-        axios.post(process.env.VUE_APP_API_ENDPOINT + '/user/login', {
+        this.scene.start('playGame', {
+            userName: this.userName,
+            userPw: this.userPw
+        });
+
+        /*axios.post(process.env.VUE_APP_API_ENDPOINT + '/user/login', {
             userName: this.userName,
             userPw: this.userPw
         }, {
@@ -171,10 +179,13 @@ class Stop extends Phaser.Scene {
                 });
             }else if(response.data.success === 'N'){
                 //실패
+                alert('login fail : not matched user information.');
             }else{
                 //에러
+                alert('login fail : error');
+                location.reload();
             }
-        });
+        });*/
     }
 }
 
