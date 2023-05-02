@@ -10,6 +10,11 @@ const io = new Server(http, {
     allowEIO3: true,
 })
 
+io.on('chat', (data) => {
+    console.log(data);
+    io.emit('chat', data);
+});
+
 io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('send', message => {

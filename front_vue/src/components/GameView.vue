@@ -1,5 +1,4 @@
 <template>
-  <h3>game</h3>
   <div>
     <label>Chat</label>
     <textarea v-model="textarea" disabled v-auto-scroll></textarea>
@@ -25,6 +24,9 @@ export default {
     /*SocketioService.socketPlugin.on('chat', (data) => {
       console.log(data);
     });*/
+    this.$socket.on('connection', (data) => {
+      console.log(data);
+    })
     this.$socket.on('chat', (data) => {
       this.textarea += data + '\n';
     });
@@ -39,7 +41,7 @@ export default {
     }
   },
   methods: {
-    sendMessage(msg) {
+    sendMessage() {
       /*this.$socketPlugin.emit('chat',{
         message: this.message
       });*/
@@ -48,10 +50,10 @@ export default {
         this.message = data;
         this.textarea += data + '\n';
       });*/
-      this.message = msg;
+      console.log(this.message);
       this.textarea += this.message + '\n';
-      this.message = ''
-      this.$sendMessage(msg);
+      this.message = '';
+      /*this.$sendMessage(msg);*/
     }
   }
 }

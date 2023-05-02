@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('socket-server:server');
 var http = require('http');
+const {Server} = require("socket.io");
 
 /**
  * Get port from environment and store in Express.
@@ -20,15 +21,27 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://localhost:8080'
+  },
+  allowEIO3: true,
+});
+
+server.listen('8080');
+
+io.on('chat', (data) => {
+  console.log(data);
+  io.emit('chat', data);
+});
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
 
 /**
  * Normalize a port into a number, string, or false.

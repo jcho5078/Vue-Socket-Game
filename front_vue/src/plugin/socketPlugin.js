@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const socketPlugin = io('http://localhost:3000',{
+const socket = io('http://localhost:3000',{
     cors: { origin: '*' },
     transports : ['websocket']
 });
@@ -12,11 +12,11 @@ const SocketPlugin = {
         });
 
         vue.prototype.$sendMessage = ($payload) => {
-            socketPlugin.emit('chat', $payload);
+            socket.emit('chat', $payload);
         };
 
         // 인스턴스 메소드 추가
-        vue.prototype.$socket = socketPlugin;
+        vue.prototype.$socket = socket;
     },
 };
 
