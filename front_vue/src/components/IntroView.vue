@@ -1,5 +1,4 @@
 <template>
-  <img alt="Vue logo" src="../assets/logo.png">
   <button @click="moveGame">Move to Game</button>
   <h2>Intro</h2>
 </template>

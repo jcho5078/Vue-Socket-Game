@@ -1,38 +1,25 @@
 <template>
-  <div>
-    <label>Chat</label>
-    <textarea v-model="textarea" disabled v-auto-scroll></textarea>
-    <br>
-    <label>Your Message</label>
-    <input type="text" v-model="message"/>
-    <button class="md-primary md-raised" @click="sendMessage">Submit</button>
-  </div>
+  <div></div>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-import GameData from '@/assets/game'
-//import SocketioService from '../assets/socketPlugin';
+import {Phaser, PlayGame, config} from '@/assets/game'
 
 export default {
   name: "GameView",
   created() {
-    /*SocketioService.setupSocketConnection();*/
-    /*this.socketPlugin.on('chat', (data)=> {
-      this.textarea += data.message + "\n"
-    })*/
-    /*SocketioService.socketPlugin.on('chat', (data) => {
-      console.log(data);
-    });*/
-    this.$socket.on('connection', (data) => {
-      console.log(data);
-    })
-    this.$socket.on('chat', (data) => {
-      this.textarea += data + '\n';
-    });
+    //this.showGame();
+
+    const gameScene = new PlayGame();
+    gameScene.userName = '';
+    config.scene = [gameScene];
+    const GameData = new Phaser.Game(config);
+
+    GameData.pause();
+    GameData.onHidden();
   },
   beforeUnmount() {
-    /*SocketioService.disconnect();*/
+    this.hideGame();
   },
   data() {
     return {
@@ -41,19 +28,11 @@ export default {
     }
   },
   methods: {
-    sendMessage() {
-      /*this.$socketPlugin.emit('chat',{
-        message: this.message
-      });*/
-      /*SocketioService.socketPlugin.on("chat", (data) => {
-        console.log(data);
-        this.message = data;
-        this.textarea += data + '\n';
-      });*/
-      console.log(this.message);
-      this.textarea += this.message + '\n';
-      this.message = '';
-      /*this.$sendMessage(msg);*/
+    showGame(){
+      document.querySelector('canvas').hidden = false;
+    },
+    hideGame (){
+      document.querySelector('canvas').hidden = true;
     }
   }
 }

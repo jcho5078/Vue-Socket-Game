@@ -7,7 +7,15 @@
 <script>
 
 export default {
-  name: 'App'
+  name: 'App',
+  /*methods: {
+    hideGame (){
+      document.querySelector('canvas').hidden = true;
+    }
+  },
+  beforeMount() {
+    this.hideGame();
+  }*/
 }
 </script>
 

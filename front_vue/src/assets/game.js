@@ -109,7 +109,7 @@ class Asteroid extends Phaser.Physics.Matter.Sprite
 }
 
 // eslint-disable-next-line no-unused-vars
-class Stop extends Phaser.Scene {
+/*class Stop extends Phaser.Scene {
 
     constructor ()
     {
@@ -153,16 +153,16 @@ class Stop extends Phaser.Scene {
         });
     }
 
-    /**
+    /!**
      * 로그인 시도
-     */
+     *!/
     login(){
         this.scene.start('playGame', {
             userName: this.userName,
             userPw: this.userPw
         });
 
-        /*axios.post(process.env.VUE_APP_API_ENDPOINT + '/user/login', {
+        /!*axios.post(process.env.VUE_APP_API_ENDPOINT + '/user/login', {
             userName: this.userName,
             userPw: this.userPw
         }, {
@@ -185,9 +185,9 @@ class Stop extends Phaser.Scene {
                 alert('login fail : error');
                 location.reload();
             }
-        });*/
+        });*!/
     }
-}
+}*/
 
 class PlayGame extends Phaser.Scene
 {
@@ -196,6 +196,7 @@ class PlayGame extends Phaser.Scene
     bullets;
     asteroids;
     enemies;
+    userName;
 
     shipCollisionCategory;
     bulletCollisionCategory;
@@ -209,11 +210,11 @@ class PlayGame extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('ship', 'assets/sprites/thrust_ship.png');
+        this.load.image('ship', '/assets/sprites/thrust_ship.png');
         // this.load.image('bullet', 'assets/sprites/bullets/bullet7.png');
-        this.load.image('bullet', 'assets/sprites/shmup-bullet.png');
-        this.load.spritesheet('enemy', 'assets/sprites/metalface78x92.png', { frameWidth: 78, frameHeight: 92 });
-        this.load.unityAtlas('asteroids', 'assets/atlas/asteroids.png', 'assets/atlas/asteroids.png.meta');
+        this.load.image('bullet', '/assets/sprites/shmup-bullet.png');
+        this.load.spritesheet('enemy', '/assets/sprites/metalface78x92.png', { frameWidth: 78, frameHeight: 92 });
+        this.load.unityAtlas('asteroids', '/assets/sprites/asteroids.png', '/assets/sprites/asteroids.png.meta');
     }
 
     create ()
@@ -354,9 +355,9 @@ const config = {
             }
         }
     },
-    scene: [ Stop, PlayGame]
+    scene: [PlayGame]
 };
 // eslint-disable-next-line no-unused-vars
-const GameData = new Phaser.Game(config);
+//const GameData = new Phaser.Game(config);
 
-export {GameData};
+export {Phaser, PlayGame, config};

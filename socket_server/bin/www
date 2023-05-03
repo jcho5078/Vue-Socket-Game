@@ -23,16 +23,19 @@ app.set('port', port);
 var server = http.createServer(app);
 var io = require('socket.io')(server, {
   cors: {
-    origin: 'http://localhost:8080'
+    origin: '*'
   },
   allowEIO3: true,
 });
 
-server.listen('8080');
+server.listen(port);
 
-io.on('chat', (data) => {
-  console.log(data);
-  io.emit('chat', data);
+io.on('connection', socket => {
+  console.log(socket.nsp.sockets);
+  socket.on('chat', message => {
+    console.log(message);
+    io.emit('chat', message);
+  })
 });
 
 /**
