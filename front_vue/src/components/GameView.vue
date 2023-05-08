@@ -3,20 +3,23 @@
 </template>
 
 <script>
-import {Phaser, PlayGame, config} from '@/assets/game'
+//import {Phaser, PlayGame, config} from '@/assets/game'
+
+// eslint-disable-next-line no-unused-vars
+//import {GameData} from '@/assets/game'
 
 export default {
   name: "GameView",
   created() {
     //this.showGame();
 
-    const gameScene = new PlayGame();
+   /* const gameScene = new PlayGame();
     gameScene.userName = '';
     config.scene = [gameScene];
     const GameData = new Phaser.Game(config);
 
     GameData.pause();
-    GameData.onHidden();
+    GameData.onHidden();*/
   },
   beforeUnmount() {
     this.hideGame();

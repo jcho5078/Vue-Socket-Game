@@ -28,4 +28,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+screen {
+  width: 100%;
+  padding: 0px 50px 0 50px;
+}
 </style>
