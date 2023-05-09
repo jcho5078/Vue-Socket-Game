@@ -358,6 +358,6 @@ const config = {
     scene: [PlayGame]
 };
 // eslint-disable-next-line no-unused-vars
-const GameData = new Phaser.Game(config);
+//const GameData = new Phaser.Game(config);
 
-export {Phaser, PlayGame, config, GameData};
+export {Phaser, PlayGame, config};

@@ -5,6 +5,9 @@ import {createRouter, createWebHistory} from "vue-router";
 import 'vuetify/styles'
 import 'vuetify'
 
+//ckeditor
+import CKEditor from '@ckeditor/ckeditor5-vue'
+
 import App from './App.vue'
 import GameView from "@/components/GameView";
 import Intro from '@/components/IntroView';
@@ -56,6 +59,7 @@ GameData.pause();
 GameData.onHidden();*/
 
 app.use(router);
+app.use(CKEditor);
 
 app.directive('auto-scroll', {
     updated: el => {
