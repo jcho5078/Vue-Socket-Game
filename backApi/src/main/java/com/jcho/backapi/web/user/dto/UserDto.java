@@ -18,7 +18,7 @@ public class UserDto implements Serializable {
     private final LocalDateTime lastLoginDt;
     private final boolean isValid;
 
-    public static UserDto mapper(User user){
+    public static UserDto toDto(User user){
         return UserDto.builder()
                 .loginId(user.getLoginId())
                 .userNm(user.getUserNm())

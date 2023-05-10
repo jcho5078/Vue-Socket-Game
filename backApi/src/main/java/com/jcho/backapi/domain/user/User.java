@@ -1,7 +1,9 @@
 package com.jcho.backapi.domain.user;
 
 import com.jcho.backapi.util.BooleanConverter;
+import com.jcho.backapi.web.user.dto.UserDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -52,5 +54,15 @@ public class User {
      */
     public void updateLogin(LocalDateTime currentDateTime){
         this.lastLoginDt = currentDateTime;
+    }
+
+    public static UserDto toDto(User user){
+        return UserDto.builder()
+                .loginId(user.getLoginId())
+                .userNm(user.getUserNm())
+                .regDt(user.getRegDt())
+                .lastLoginDt(user.getLastLoginDt())
+                .isValid(user.isValid())
+                .build();
     }
 }

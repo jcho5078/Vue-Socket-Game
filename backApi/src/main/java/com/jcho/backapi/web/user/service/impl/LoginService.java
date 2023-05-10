@@ -16,6 +16,8 @@ public class LoginService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    public
+
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         long id = Long.parseLong(userId);

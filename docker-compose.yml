@@ -51,4 +51,4 @@ services:
       - back
 
 networks:
-  backend:
+  net:
