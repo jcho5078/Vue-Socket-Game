@@ -62,7 +62,7 @@ public class JwtUtil {
     }
 
     /**
-     * 토큰
+     * 토큰만료 확인
      * @param token
      * @return
      */
@@ -80,7 +80,7 @@ public class JwtUtil {
         Key key = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
 
         String jwt = Jwts.builder().setClaims(claims).setSubject(userId).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 1시간 유지
                 .signWith(SignatureAlgorithm.HS256, key).compact();
 
         return jwt;

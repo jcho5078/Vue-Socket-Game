@@ -1,14 +1,16 @@
 package com.jcho.backapi.domain.user;
 
+import com.jcho.backapi.util.BooleanConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")
+@Table(name = "T_USER")
 @Getter
 public class User {
     @Id
@@ -37,6 +39,12 @@ public class User {
     @Column(name = "LAST_LOGIN_DT", length = 30)
     @CreatedDate
     private LocalDateTime lastLoginDt;
+
+    @Comment("유효여부")
+    @Column(name = "IS_VALID", length = 5)
+    @Convert(converter = BooleanConverter.class)
+    @ColumnDefault(value = "'N'")
+    private boolean isValid;
 
     /**
      * lastLoginDt 갱신

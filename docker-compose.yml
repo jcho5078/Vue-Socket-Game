@@ -1,0 +1,54 @@
+version: "1"
+services:
+  db:
+    image: mariadb:10
+    container_name: mysql
+    ports:
+      - 3306:3306
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_HOST: localhost
+      MYSQL_PORT: 3306
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: test
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/mariadb/conf.d:/etc/mysql/mariadb.conf.d
+      - ./db/data:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    env_file: ./db/initdb.d/.env
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+  back:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    ports:
+      - 8080:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/test?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_HIBERNATE_DDL: create-drop
+  front:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./front_vue/nginx/conf.d:/etc/nginx/conf.d
+      - ./front_vue/nginx/static:/etc/nginx/jcho/static # 미완성
+    depends_on:
+      - back
+  socket: # 미완성
+    image: nodejs-hello
+    ports:
+      - 3000:3000
+    depends_on:
+      - back
+
+networks:
+  backend:
