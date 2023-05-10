@@ -1,17 +1,18 @@
 <template>
-  <screen>
+  <div>
     <div>
-      <h3>LOGIN</h3>
-      <div>
-        <
-      </div>
+      ID:
+      <input type="text">
     </div>
-  </screen>
+    <div>
+
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "LoginView"
+  name: "LoginForm"
 }
 </script>
 

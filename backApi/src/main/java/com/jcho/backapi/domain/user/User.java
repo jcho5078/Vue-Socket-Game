@@ -12,7 +12,10 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "T_USER")
+@Table(name = "T_USER", indexes = {
+        @Index(name = "idx_userId", columnList = "USER_ID"),
+        @Index(name = "idx_loginId_loginPw", columnList = "LOGIN_ID, LOGIN_PW")
+})
 @Getter
 public class User {
     @Id
@@ -54,15 +57,5 @@ public class User {
      */
     public void updateLogin(LocalDateTime currentDateTime){
         this.lastLoginDt = currentDateTime;
-    }
-
-    public static UserDto toDto(User user){
-        return UserDto.builder()
-                .loginId(user.getLoginId())
-                .userNm(user.getUserNm())
-                .regDt(user.getRegDt())
-                .lastLoginDt(user.getLastLoginDt())
-                .isValid(user.isValid())
-                .build();
     }
 }

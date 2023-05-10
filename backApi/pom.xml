@@ -15,6 +15,7 @@
     <description>backApi</description>
     <properties>
         <java.version>11</java.version>
+        <maven.compiler.release>11</maven.compiler.release>
     </properties>
     <dependencies>
         <dependency>
@@ -83,10 +84,6 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <!--mariadb-->

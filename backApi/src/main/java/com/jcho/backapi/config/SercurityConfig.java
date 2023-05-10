@@ -8,30 +8,33 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
-public class SercurityConfig extends WebSecurityConfigurerAdapter {
+public class SercurityConfig {
 
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
 
-    @Override
     @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception{
-        return super.authenticationManagerBean();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http.csrf().disable();
-        http.httpBasic().disable()
-                .authorizeRequests()
-                .antMatchers("/user/test").authenticated()
-                .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()// swagger 허용
-                .antMatchers("/**").permitAll()// 임시로 접근 완전 허용
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    protected SecurityFilterChain configure(HttpSecurity http) throws Exception{
+        http.csrf().disable()
+                .headers(). frameOptions().disable()
+                .and()
+                .authorizeHttpRequests((request) -> request
+                    .requestMatchers("/**").permitAll()// 임시로 접근 완전 허용
+                    .requestMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
+                    .hasAnyRole("USER", "AUTH").anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                    .loginPage("/user/login")
+                    .permitAll()
+                )
+                .logout(logout -> logout
+                    .permitAll()
+                );
+        return http.build();
     }
 }

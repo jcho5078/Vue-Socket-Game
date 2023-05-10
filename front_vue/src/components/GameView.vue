@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div id="gameDiv">
+
+  </div>
 </template>
 
 <script>
@@ -11,6 +13,8 @@
 export default {
   name: "GameView",
   created() {
+    const gameView = document.querySelector('canvas');
+    document.getElementById('gameDiv').appendChild(gameView);
     //this.showGame();
 
    /* const gameScene = new PlayGame();
