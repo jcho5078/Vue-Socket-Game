@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<EntityModel> login(@RequestBody UserDto userDto) throws Exception{
 
-        UserDto responseDto = UserDto.toDto(userRepository.findById(userDto.getUserId()).get());
+        UserDto responseDto = UserDto.toDto(userRepository.findUsersByLoginIdAndLoginPw(userDto.getLoginId(), userDto.getLoginPw()));
 
         if(StringUtils.isEmpty(responseDto.getUserId())){
             logger.info("'" + userDto.getLoginId() + "' is not found.\n");
@@ -47,10 +47,10 @@ public class UserController {
                     .notFound().build();
         }
 
-        EntityModel entityModel = EntityModel.of(userDto, linkTo(methodOn(UserController.class).login(responseDto)).withSelfRel());
+        EntityModel entityModel = EntityModel.of(responseDto, linkTo(methodOn(UserController.class).login(responseDto)).withSelfRel());
 
         return ResponseEntity.ok()
-                .header(jwtUtil.jwtHeader, jwtUtil.generateToken(Long.toString(userDto.getUserId())))
+                .header(jwtUtil.jwtHeader, jwtUtil.generateToken(Long.toString(responseDto.getUserId())))
                 .body(entityModel);
     }
 }

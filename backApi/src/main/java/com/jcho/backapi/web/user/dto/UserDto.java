@@ -20,6 +20,7 @@ public class UserDto implements Serializable {
 
     public static UserDto toDto(User user){
         return UserDto.builder()
+                .userId(user.getUserId())
                 .loginId(user.getLoginId())
                 .userNm(user.getUserNm())
                 .regDt(user.getRegDt())

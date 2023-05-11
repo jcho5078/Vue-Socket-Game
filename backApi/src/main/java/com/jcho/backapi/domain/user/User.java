@@ -1,26 +1,37 @@
 package com.jcho.backapi.domain.user;
 
 import com.jcho.backapi.util.BooleanConverter;
-import com.jcho.backapi.web.user.dto.UserDto;
-import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "T_USER", indexes = {
+@Table(name = "t_user", indexes = {
         @Index(name = "idx_userId", columnList = "USER_ID"),
         @Index(name = "idx_loginId_loginPw", columnList = "LOGIN_ID, LOGIN_PW")
 })
 @Getter
+@NoArgsConstructor
+@DynamicInsert
+@DynamicUpdate
 public class User {
+
+    public User(String loginId, String loginPw){
+        this.loginId = loginId;
+        this.loginPw = loginPw;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "USER_ID", nullable = false)
     private Long userId;
 
     @Comment("로그인 ID")
@@ -48,7 +59,7 @@ public class User {
     @Comment("유효여부")
     @Column(name = "IS_VALID", length = 5)
     @Convert(converter = BooleanConverter.class)
-    @ColumnDefault(value = "'N'")
+    @ColumnDefault(value = "'Y'")
     private boolean isValid;
 
     /**

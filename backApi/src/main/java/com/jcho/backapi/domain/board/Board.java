@@ -1,7 +1,8 @@
 package com.jcho.backapi.domain.board;
 
-import jakarta.persistence.*;
 import lombok.Getter;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "T_BOARD")
