@@ -1,10 +1,12 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import Intro from "@/components/IntroView";
+import Intro from "@/view/IntroView";
 import GameView from "@/components/GameView";
 import ChatView from "@/components/ChatView";
 import BoardList from "@/view/board/BoardList";
 import BoardView from "@/view/board/BoardView";
+import LoginView from "@/view/login/LoginView";
+import SignUpView from "@/view/login/SignUpView";
 
 
 export default createRouter({
@@ -29,6 +31,14 @@ export default createRouter({
         {
             path: '/board/view/:boardNo',
             component: BoardView
+        },
+        {
+            path: '/user/login',
+            component: LoginView
+        },
+        {
+            path: '/user/signUp',
+            component: SignUpView
         }
     ]
 });

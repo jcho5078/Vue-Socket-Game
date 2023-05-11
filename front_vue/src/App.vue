@@ -1,8 +1,9 @@
 <template>
-
-  <keep-alive>
-    <router-view></router-view>
-  </keep-alive>
+  <screen>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
+  </screen>
 </template>
 
 <script>

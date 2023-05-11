@@ -1,5 +1,8 @@
 import { createApp } from 'vue'
-import {router} from './router'
+import router from './router'
+
+// Vuex
+import store from "@/store/store";
 
 // Vuetify
 import 'vuetify/styles'
@@ -30,6 +33,7 @@ GameData.onHidden();*/
 
 app.use(router);
 app.use(CKEditor);
+app.use(store);
 
 app.directive('auto-scroll', {
     updated: el => {

@@ -1,10 +1,9 @@
 <template>
-  <screen>
     <div>
       <h3>LOGIN</h3>
       <login-form/>
+      {{this.$store.state.counter}}
     </div>
-  </screen>
 </template>
 
 <script>

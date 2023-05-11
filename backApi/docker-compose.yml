@@ -20,17 +20,3 @@ services:
       - ./db/initdb.d:/docker-entrypoint-initdb.d
     env_file: ./db/initdb.d/.env
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
-  app:
-    depends_on:
-      - db
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: api
-    ports:
-      - 8080:8080
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/test?useUnicode=yes&characterEncoding=UTF-8&useSSL=false
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
-      SPRING_HIBERNATE_DDL: create-drop

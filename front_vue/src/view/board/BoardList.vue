@@ -1,30 +1,28 @@
 <template>
   <h3>게시판</h3>
-  <screen>
-    <table class="boardTable">
-      <thead>
-      <tr>
-        <th>No</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>작성일자</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="board in boardList"
-          :key="board.boardNo"
-          @click="viewBoard($event, board.boardNo)">
-        <td>{{ board.boardNo }}</td>
-        <td>{{ board.boardTitle }}</td>
-        <td>{{ board.userNm }}</td>
-        <td>{{ board.boardDt }}</td>
-      </tr>
-      <tr v-if="boardList === null">
-        작성글이 없습니다.
-      </tr>
-      </tbody>
-    </table>
-  </screen>
+  <table class="boardTable">
+    <thead>
+    <tr>
+      <th>No</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>작성일자</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="board in boardList"
+        :key="board.boardNo"
+        @click="viewBoard($event, board.boardNo)">
+      <td>{{ board.boardNo }}</td>
+      <td>{{ board.boardTitle }}</td>
+      <td>{{ board.userNm }}</td>
+      <td>{{ board.boardDt }}</td>
+    </tr>
+    <tr v-if="boardList === null">
+      작성글이 없습니다.
+    </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>

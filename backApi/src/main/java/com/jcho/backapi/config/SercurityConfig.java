@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity
@@ -23,11 +26,24 @@ public class SercurityConfig {
         http.csrf().disable()
                 .headers(). frameOptions().disable()
                 .and()
-                .authorizeHttpRequests((request) -> request
-                    .requestMatchers("/**").permitAll()// 임시로 접근 완전 허용
-                    .requestMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
-                    .hasAnyRole("USER", "AUTH").anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
+                    authorizationManagerRequestMatcherRegistry
+
+                            .requestMatchers(new RequestMatcher() {
+                                @Override
+                                public boolean matches(HttpServletRequest request) {
+                                    return false;
+                                }
+                            }).hasAnyRole().anyRequest().authenticated()
+
+                })
+
+                .authorizeHttpRequests()
+
+
+                .requestMatchers("/user/login").permitAll()// 임시로 접근 완전 허용
+                .requestMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
+                .hasAnyRole("USER", "AUTH").anyRequest().authenticated()
                 .formLogin(login -> login
                     .loginPage("/user/login")
                     .permitAll()
