@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const connect = axios.create({
+let connect = axios.create({
+    headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET'},
     baseURL: process.env.VUE_APP_API_ENDPOINT
 });
 

@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import router from './router'
+import cookies from 'vue-cookies'
 
 // Vuex
 import store from "@/store/store";
@@ -31,8 +32,15 @@ app.config.globalProperties.$game = GameData;
 GameData.pause();
 GameData.onHidden();*/
 
+router.beforeEach((to, from, next) => {
+    console.log(from);
+    console.log(to);
+    return next();
+});
+
 app.use(router);
 app.use(CKEditor);
+app.use(cookies);
 app.use(store);
 
 app.directive('auto-scroll', {

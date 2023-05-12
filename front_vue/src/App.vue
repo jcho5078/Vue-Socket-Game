@@ -1,23 +1,23 @@
 <template>
-  <screen>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
-  </screen>
 </template>
 
 <script>
 
 export default {
   name: 'App',
-  /*methods: {
+  methods: {
     hideGame (){
       document.querySelector('canvas').hidden = true;
     }
   },
   beforeMount() {
-    this.hideGame();
-  }*/
+    //this.hideGame();
+
+    console.log(this.$cookies);
+  }
 }
 </script>
 

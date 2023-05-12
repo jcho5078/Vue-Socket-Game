@@ -2,7 +2,8 @@ import {createStore} from 'vuex';
 
 export default createStore({
     state: {
-        counter: 10
+        counter: 10,
+        auth: ''
     },
     getters: {
         time2(state) {

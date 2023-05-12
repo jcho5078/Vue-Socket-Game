@@ -15,6 +15,7 @@
     "phaser": "^3.60.0",
     "socket.io-client": "^4.6.1",
     "vue": "^3.2.13",
+    "vue-cookies": "^1.8.3",
     "vue-router": "^4.0.13",
     "vue-socket.io": "^3.0.10",
     "vuetify": "^3.2.2",

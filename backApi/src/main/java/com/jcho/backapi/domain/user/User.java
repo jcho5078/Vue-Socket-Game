@@ -24,9 +24,10 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 public class User {
 
-    public User(String loginId, String loginPw){
+    public User(String loginId, String loginPw, String userNm){
         this.loginId = loginId;
         this.loginPw = loginPw;
+        this.userNm = userNm;
     }
 
     @Id

@@ -4,7 +4,7 @@
   <button @click="moveGame">Move to Game</button><br>
   <button @click="moveChat">Move to Chat</button><br>
   <button @click="moveBoard">Move to Board</button><br>
-  <button @click="moveLogin">Move to Login</button>
+  <button @click="moveLogin">Move to Login</button><br>
   <button @click="moveSignUp">Move to SignUp</button>
 
   <br><br>

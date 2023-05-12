@@ -1,6 +1,7 @@
 package com.jcho.backapi.web.user.controller;
 
 import com.jcho.backapi.BackApiApplication;
+import com.jcho.backapi.common.ResultCode;
 import com.jcho.backapi.domain.user.UserRepository;
 import com.jcho.backapi.util.JwtUtil;
 import com.jcho.backapi.web.user.dto.UserDto;
@@ -37,7 +38,7 @@ public class UserController {
      * @throws Exception
      */
     @PostMapping("/login")
-    public ResponseEntity<EntityModel> login(@RequestBody UserDto userDto) throws Exception{
+    public ResponseEntity<ResultCode> login(@RequestBody UserDto userDto) throws Exception{
 
         UserDto responseDto = UserDto.toDto(userRepository.findUsersByLoginIdAndLoginPw(userDto.getLoginId(), userDto.getLoginPw()));
 
@@ -51,6 +52,6 @@ public class UserController {
 
         return ResponseEntity.ok()
                 .header(jwtUtil.jwtHeader, jwtUtil.generateToken(Long.toString(responseDto.getUserId())))
-                .body(entityModel);
+                .body(ResultCode.REQUEST_OK);
     }
 }

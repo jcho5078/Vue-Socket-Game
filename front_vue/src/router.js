@@ -8,8 +8,7 @@ import BoardView from "@/view/board/BoardView";
 import LoginView from "@/view/login/LoginView";
 import SignUpView from "@/view/login/SignUpView";
 
-
-export default createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
@@ -42,3 +41,5 @@ export default createRouter({
         }
     ]
 });
+
+export default router;

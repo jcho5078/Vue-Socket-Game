@@ -1,13 +1,14 @@
 <template>
   <div class="loginForm">
-    <form method="post" enctype="application/x-www-form-urlencoded">
+    <form @submit.prevent="doLogin">
       <div class="input_div">
-        ID:<input type="text" id="loginId">
+        ID:<input type="text" id="loginId" v-model="loginData.loginId">
       </div>
       <div class="input_div">
-        PW:<input type="password" id="loginPw">
+        PW:<input type="password" id="loginPw" v-model="loginData.loginPw">
       </div>
-      <button type="submit" @submit.prevent="doLogin">로그인</button>
+      <h5 v-if="cookie !== ''">{{this.cookie}}</h5>
+      <button type="submit">로그인</button>
     </form>
   </div>
 </template>
@@ -19,18 +20,31 @@ export default {
   name: "LoginForm",
   data() {
     return {
-
+      loginData: {
+        loginId: '',
+        loginPw: '',
+        withCredentials: true
+      },
+      cookie: ""
     }
   },
   methods: {
     doLogin(){
-      login().then(response => {
+      login(this.loginData).then(response => {
+
         console.log(this.response);
         if(response.status != 200){
           alert(response.status);
         }else{
           console.log(response.headers);
           console.log(response.data);
+          this.$cookies.set("userCookie", response.headers.get(process.env.APP_JWT_HEADER));
+          this.cookie = this.$cookies.get("userCookie");
+          localStorage.setItem("userData", JSON.stringify(response.headers.get(process.env.APP_JWT_HEADER)));
+          console.log(response.headers.get(process.env.APP_JWT_HEADER));
+          const test = response.headers;
+          console.log(test);
+          console.log("userData in localStroage : " + localStorage.getItem("userData"));
         }
       });
     }
