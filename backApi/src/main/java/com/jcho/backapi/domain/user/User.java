@@ -1,6 +1,7 @@
 package com.jcho.backapi.domain.user;
 
 import com.jcho.backapi.util.BooleanConverter;
+import com.jcho.backapi.web.user.dto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "t_user", indexes = {
-        @Index(name = "idx_userId", columnList = "USER_ID"),
+        @Index(name = "idx_userNo", columnList = "USER_NO"),
         @Index(name = "idx_loginId_loginPw", columnList = "LOGIN_ID, LOGIN_PW")
 })
 @Getter
@@ -32,8 +33,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID", nullable = false)
-    private Long userId;
+    @Column(name = "USER_NO", nullable = false)
+    private Long userNo;
 
     @Comment("로그인 ID")
     @Column(name = "LOGIN_ID", length = 50, unique = true)
@@ -69,5 +70,19 @@ public class User {
      */
     public void updateLogin(LocalDateTime currentDateTime){
         this.lastLoginDt = currentDateTime;
+    }
+
+    /**
+     * convert user entity
+     * @param userDto
+     * @return
+     */
+    public User toEntity(UserDto userDto){
+        this.loginId = userDto.getLoginId();
+        this.loginPw = userDto.getLoginPw();
+        this.userNm = userDto.getUserNm();
+        this.regDt = LocalDateTime.now();
+
+        return this;
     }
 }

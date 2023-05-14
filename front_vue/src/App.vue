@@ -1,4 +1,5 @@
 <template>
+    <header-form/>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -6,8 +7,11 @@
 
 <script>
 
+import HeaderForm from "@/components/nav/headerForm";
+
 export default {
   name: 'App',
+  components: {HeaderForm},
   methods: {
     hideGame (){
       document.querySelector('canvas').hidden = true;
@@ -28,10 +32,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 screen {
   width: 100%;
   padding: 0px 50px 0 50px;
+}
+button {
+  padding: 2px 4px;
+  margin: 5px;
+  border: 1px solid #000000;
+}
+button:hover{
+  padding: 3px 6px;
 }
 </style>

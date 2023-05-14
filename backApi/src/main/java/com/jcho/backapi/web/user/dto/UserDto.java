@@ -10,22 +10,25 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class UserDto implements Serializable {
-    private final Long userId;
-    private final String loginId;
-    private final String loginPw;
-    private final String userNm;
-    private final LocalDateTime regDt;
-    private final LocalDateTime lastLoginDt;
-    private final boolean isValid;
+    private Long userNo;
+    private String loginId;
+    private String loginPw;
+    private String userNm;
+    private LocalDateTime regDt;
+    private LocalDateTime lastLoginDt;
+    private boolean isValid;
+
+    private String jwtToken;
 
     public static UserDto toDto(User user){
         return UserDto.builder()
-                .userId(user.getUserId())
+                .userNo(user.getUserNo())
                 .loginId(user.getLoginId())
+                .loginPw(user.getLoginPw())
                 .userNm(user.getUserNm())
                 .regDt(user.getRegDt())
                 .lastLoginDt(user.getLastLoginDt())
-                .isValid(user.isValid())
+                .isValid(user.isValid() == true ? true : false)
                 .build();
     }
 }

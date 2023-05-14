@@ -1,5 +1,6 @@
 package com.jcho.backapi.util;
 
+import com.jcho.backapi.common.CommonCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,23 +19,12 @@ import java.util.function.Function;
 public class JwtUtil {
 
     /**
-     * jwt생성 키
-     */
-    @Value("${jwt.key}")
-    private String jwtKey;
-
-    /**
-     * jwt 헤더 조회
-     */
-    @Value("${jwt.header}")
-    public String jwtHeader;
-
-    /**
      * 토큰 내 유저정보확인
      * @param token
      * @return
      */
     public String extractUserId(String token) {
+        token = getReplaceToken(token);
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -44,6 +34,7 @@ public class JwtUtil {
      * @return
      */
     public Date extractExpiration(String token) {
+        token = getReplaceToken(token);
         return extractClaim(token, Claims::getExpiration);
     }
 
@@ -56,7 +47,8 @@ public class JwtUtil {
      * @return
      */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = Jwts.parser().setSigningKey(jwtKey.getBytes()).parseClaimsJws(token).getBody();
+        token = getReplaceToken(token);
+        final Claims claims = Jwts.parser().setSigningKey(CommonCode.JWT_KEY.getBytes()).parseClaimsJws(token).getBody();
         String val = claims.toString();//test
         return claimsResolver.apply(claims);
     }
@@ -67,6 +59,7 @@ public class JwtUtil {
      * @return
      */
     private Boolean isTokenExpired(String token) {
+        token = getReplaceToken(token);
         return extractExpiration(token).before(new Date());
     }
 
@@ -77,7 +70,7 @@ public class JwtUtil {
      */
     public String generateToken(String userId) {
         Claims claims = Jwts.claims().setSubject(userId);
-        Key key = Keys.hmacShaKeyFor(jwtKey.getBytes(StandardCharsets.UTF_8));
+        Key key = Keys.hmacShaKeyFor(CommonCode.JWT_KEY.getBytes(StandardCharsets.UTF_8));
 
         String jwt = Jwts.builder().setClaims(claims).setSubject(userId).setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 1시간 유지
@@ -92,7 +85,12 @@ public class JwtUtil {
      * @return
      */
     public boolean validateToken(String jwtToken) {
-        Claims claims = Jwts.parser().setSigningKey(jwtKey.getBytes()).parseClaimsJws(jwtToken).getBody();
+        jwtToken = getReplaceToken(jwtToken);
+        Claims claims = Jwts.parser().setSigningKey(CommonCode.JWT_KEY.getBytes()).parseClaimsJws(jwtToken).getBody();
         return !claims.getExpiration().before(new Date());
+    }
+
+    public String getReplaceToken(String jwtToken){
+        return jwtToken.replaceAll(CommonCode.TOKEN_PREFIX, "");
     }
 }

@@ -1,7 +1,8 @@
 package com.jcho.backapi.filter;
 
+import com.jcho.backapi.common.CommonCode;
 import com.jcho.backapi.util.JwtUtil;
-import com.jcho.backapi.web.user.service.impl.LoginService;
+import com.jcho.backapi.web.user.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,18 +31,21 @@ public class JwtAuthFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
-        String token = ((HttpServletRequest)request).getHeader(jwtUtil.jwtHeader);
+        String token = ((HttpServletRequest)request).getHeader(CommonCode.JWT_HEADER);
         String userId = null;
 
         // 현재 Authentication 정보
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // 토큰 확인 유효 확인
-        if(token != null && jwtUtil.validateToken(token)){
+        if(token != null
+                && token.startsWith(CommonCode.TOKEN_PREFIX)
+                && jwtUtil.validateToken(token)){
+
             userId = jwtUtil.extractUserId(token);
             //getPrincipal 과 loadUserByUsername로 불러온 UserDetails 값 비교하기
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            UserDetails userDetails2 = loginService.loadUserByUsername(userId);
+            //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            UserDetails userDetails = loginService.loadUserByUsername(userId);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 

@@ -17,9 +17,5 @@ spring:
     show-sql: true
     generate-ddl: true
 
-jwt:
-  key: JsonKeyDJKAMCLSWNDSLDLSFMAFNFDHSJKSNCJQUEYTRNBXMCVSKZNMCQWEFSADCVZFNFDHSJKSNCJQUEYTRNBXMCNMCQWEFSADCLSHSJKSNCJQUEYTRNBMCQWEFSADC
-  header: Authorization
-
 front-server:
   url: http://localhost:8081

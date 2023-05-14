@@ -15,6 +15,29 @@ function login(param){
 }
 
 /**
+ *  회원가입
+ * @param param
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+function signUp(param){
+    return connect.post('/user/signUp', param);
+}
+
+/**
+ *  유저데이터 조회
+ * @param param
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+function getUserInfo(header){
+    return connect.get('/user/info', {
+        headers: header,
+        params: {
+            jwtToken: localStorage.getItem("userToken")
+        }
+    });
+}
+
+/**
  * 게시글 조회
  * @param param
  * @returns {Promise<axios.AxiosResponse<any>>}
@@ -25,5 +48,7 @@ function viewBoardDetail(param){
 
 export {
     login,
+    signUp,
+    getUserInfo,
     viewBoardDetail
 }

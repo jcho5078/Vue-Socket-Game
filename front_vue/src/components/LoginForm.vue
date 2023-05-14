@@ -1,5 +1,5 @@
 <template>
-  <div class="loginForm">
+  <div class="signUpForm">
     <form @submit.prevent="doLogin">
       <div class="input_div">
         ID:<input type="text" id="loginId" v-model="loginData.loginId">
@@ -7,7 +7,6 @@
       <div class="input_div">
         PW:<input type="password" id="loginPw" v-model="loginData.loginPw">
       </div>
-      <h5 v-if="cookie !== ''">{{this.cookie}}</h5>
       <button type="submit">로그인</button>
     </form>
   </div>
@@ -22,10 +21,8 @@ export default {
     return {
       loginData: {
         loginId: '',
-        loginPw: '',
-        withCredentials: true
-      },
-      cookie: ""
+        loginPw: ''
+      }
     }
   },
   methods: {
@@ -34,17 +31,13 @@ export default {
 
         console.log(this.response);
         if(response.status != 200){
-          alert(response.status);
+          alert('Error : ' + response.data.msg);
         }else{
-          console.log(response.headers);
-          console.log(response.data);
-          this.$cookies.set("userCookie", response.headers.get(process.env.APP_JWT_HEADER));
-          this.cookie = this.$cookies.get("userCookie");
-          localStorage.setItem("userData", JSON.stringify(response.headers.get(process.env.APP_JWT_HEADER)));
-          console.log(response.headers.get(process.env.APP_JWT_HEADER));
-          const test = response.headers;
-          console.log(test);
-          console.log("userData in localStroage : " + localStorage.getItem("userData"));
+          console.log(response.data.jwtToken);
+          localStorage.setItem('userData', response.data.responseDto);
+          localStorage.setItem('userToken', response.data.jwtToken);
+          console.log("userToken in localStroage : " + localStorage.getItem("userToken"));
+          this.$router.push('/');
         }
       });
     }
@@ -67,7 +60,7 @@ button{
   padding: 15px;
   text-align: center;
 }
-.loginForm{
+.signUpForm{
   width: 340px;
   padding: 10px;
   margin: 0 auto;

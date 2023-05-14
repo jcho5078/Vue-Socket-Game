@@ -1,19 +1,28 @@
 package com.jcho.backapi.web.user.controller;
 
 import com.jcho.backapi.BackApiApplication;
+import com.jcho.backapi.common.CommonCode;
 import com.jcho.backapi.common.ResultCode;
+import com.jcho.backapi.common.dto.ResponseDTO;
+import com.jcho.backapi.domain.user.User;
 import com.jcho.backapi.domain.user.UserRepository;
+import com.jcho.backapi.util.CommonUtil;
 import com.jcho.backapi.util.JwtUtil;
 import com.jcho.backapi.web.user.dto.UserDto;
+import com.jcho.backapi.web.user.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.slf4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -24,12 +33,10 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserController {
 
     @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
     private UserRepository userRepository;
 
-    private Logger logger = BackApiApplication.logger;
+    @Autowired
+    private LoginService loginService;
 
     /**
      * 로그인
@@ -38,20 +45,31 @@ public class UserController {
      * @throws Exception
      */
     @PostMapping("/login")
-    public ResponseEntity<ResultCode> login(@RequestBody UserDto userDto) throws Exception{
+    public ResponseEntity<?> login(@RequestBody UserDto userDto) throws Exception{
 
-        UserDto responseDto = UserDto.toDto(userRepository.findUsersByLoginIdAndLoginPw(userDto.getLoginId(), userDto.getLoginPw()));
+        return CommonUtil.responseResult(loginService.login(userDto));
+    }
 
-        if(StringUtils.isEmpty(responseDto.getUserId())){
-            logger.info("'" + userDto.getLoginId() + "' is not found.\n");
-            return ResponseEntity
-                    .notFound().build();
-        }
+    /**
+     * 회원가입
+     * @param userDto
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/signUp")
+    public ResponseEntity<?> signUp(@RequestBody UserDto userDto) throws Exception{
 
-        EntityModel entityModel = EntityModel.of(responseDto, linkTo(methodOn(UserController.class).login(responseDto)).withSelfRel());
+        return CommonUtil.responseResult(loginService.signUp(userDto));
+    }
 
-        return ResponseEntity.ok()
-                .header(jwtUtil.jwtHeader, jwtUtil.generateToken(Long.toString(responseDto.getUserId())))
-                .body(ResultCode.REQUEST_OK);
+    /**
+     * 유저정보 확인
+     * @param request
+     * @return
+     */
+    @GetMapping("/info")
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request, UserDto userDto) throws Exception {
+
+        return CommonUtil.responseResult(request, loginService.getUserInfo(userDto));
     }
 }

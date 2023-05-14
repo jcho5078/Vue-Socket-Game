@@ -16,11 +16,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SercurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${jwt.key}")
-    private String jwtKey;
-
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+
+    /*@Bean
+    public CorsConfigurationSource corsConfigurer(){
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }*/
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
@@ -30,7 +41,7 @@ public class SercurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //.headers().frameOptions().disable().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/user/login", "/user/signUp", "/board/list", "/board/view").permitAll()
+                .requestMatchers("/user/login", "/user/signUp", "/user/info", "/board/list", "/board/view").permitAll()
                 .requestMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
                 .hasAnyRole("AUTH").anyRequest().authenticated();
     }
