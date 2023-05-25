@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 let connect = axios.create({
-    headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET'},
+    headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET', 'withCredentials' : true, "Authorization": 'Bearer '+localStorage.userToken},
     baseURL: process.env.VUE_APP_API_ENDPOINT
 });
 
@@ -28,11 +28,32 @@ function signUp(param){
  * @param param
  * @returns {Promise<AxiosResponse<any>>}
  */
-function getUserInfo(header){
+function getUserInfo(){
     return connect.get('/user/info', {
-        headers: header,
+        headers: {
+            'content-type': 'application/json',
+            /*'Authorization': 'Bearer '+localStorage.getItem("userToken"),*/
+        },
         params: {
-            jwtToken: localStorage.getItem("userToken")
+
+        }
+    });
+}
+
+/**
+ * 게시글 목록
+ * @param param
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+function viewBoardList(page, size){
+    return connect.get('/board/list', {
+        headers: {
+            /*'content-type': 'application/json',
+            "Authorization": 'Bearer ' + localStorage.getItem("userToken")*/
+        },
+        params: {
+            page: page,
+            size: size
         }
     });
 }
@@ -42,13 +63,28 @@ function getUserInfo(header){
  * @param param
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
-function viewBoardDetail(param){
-    return connect.get('/board/view', param);
+function viewBoardDetail(boardNo){
+    return connect.get('/board/'+boardNo, {
+        headers: {
+
+        }
+    });
+}
+
+/**
+ * 게시글 작성
+ * @param param
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+function writeBoard(param){
+    return connect.post('/board/write', param);
 }
 
 export {
     login,
     signUp,
     getUserInfo,
-    viewBoardDetail
+    viewBoardList,
+    viewBoardDetail,
+    writeBoard,
 }

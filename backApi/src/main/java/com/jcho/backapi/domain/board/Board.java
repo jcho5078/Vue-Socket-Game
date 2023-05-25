@@ -18,7 +18,7 @@ public class Board {
     @Id
     @Column(name = "BOARD_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long boardId;
+    private long boardNo;
 
     @Comment("게시물 제목")
     @Column(name = "BOARD_TITLE", length = 350)
@@ -44,23 +44,18 @@ public class Board {
     @JoinColumn(name = "REG_ID", nullable = false, foreignKey = @ForeignKey(ConstraintMode.CONSTRAINT))
     private User regUser;
 
-    @Comment("수정자")
-    @ManyToOne
-    @JoinColumn(name = "MOD_ID", nullable = true)
-    private User modUser;
-
     /**
      * convert board entity
      * @param boardDto
      * @return
      */
-    public Board toEntity(BoardDto boardDto){
+    public Board toEntity(BoardDto boardDto, User regUser){
+        this.boardNo = boardDto.getBoardNo();
         this.boardTitle = boardDto.getBoardTitle();
         this.boardDetail = boardDto.getBoardDetail();
         this.regDt = LocalDateTime.now();
-        this.modDt = boardDto.getModDt();
-        this.regUser = boardDto.getRegUser();
-        this.modUser = boardDto.getModUser();
+        this.modDt = LocalDateTime.now();
+        this.regUser = regUser;
 
         return this;
     }

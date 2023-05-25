@@ -13,7 +13,8 @@
 </template>
 
 <script>
-import {login} from '../api/api'
+import {isEmpty} from '@/common/commonUtil'
+import {login} from '@/api/api'
 
 export default {
   name: "LoginForm",
@@ -29,13 +30,16 @@ export default {
     doLogin(){
       login(this.loginData).then(response => {
 
-        console.log(this.response);
+        console.log(response);
         if(response.status != 200){
-          alert('Error : ' + response.data.msg);
+          alert('Error : ' + response.status);
+        }else if(response.status == 200
+            && (isEmpty(response.data.responseDto.toString()) || isEmpty(response.data.responseDto.jwtToken))){
+          alert('ID, PW가 틀립니다.');
         }else{
-          console.log(response.data.jwtToken);
-          localStorage.setItem('userData', response.data.responseDto);
-          localStorage.setItem('userToken', response.data.jwtToken);
+          console.log(response.data.responseDto.jwtToken);
+          localStorage.setItem('userData', JSON.stringify(response.data.responseDto));
+          localStorage.setItem('userToken', response.data.responseDto.jwtToken);
           console.log("userToken in localStroage : " + localStorage.getItem("userToken"));
           this.$router.push('/');
         }

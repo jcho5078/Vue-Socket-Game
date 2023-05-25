@@ -1,14 +1,18 @@
 package com.jcho.backapi.web.user.dto;
 
 import com.jcho.backapi.domain.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto implements Serializable {
     private Long userNo;
     private String loginId;

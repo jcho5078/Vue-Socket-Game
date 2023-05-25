@@ -12,11 +12,6 @@ public class ResponseDTO<T> {
     private T responseDto;
 
     /**
-     * jwtToken
-     */
-    private String jwtToken;
-
-    /**
      * 결과 상태
      */
     private ResultCode resultCode;

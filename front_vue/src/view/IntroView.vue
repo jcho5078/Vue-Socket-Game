@@ -36,7 +36,11 @@ export default {
     },
 
     count(){
-      this.$store.state.counter++;
+      //this.$store.commit('setCounter', {value: 1});
+      this.$store.commit({
+        type: 'setCounter',
+        value: 1
+      })
     }
   }
 }

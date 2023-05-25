@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface BoardService {
 
-    public Page<BoardDto> getBoardList(BoardDto boardDto, Pageable pageable) throws Exception;
+    public List<BoardDto> getBoardList(Pageable pageable) throws Exception;
 
-    public BoardDto getBoardOne(BoardDto boardDto) throws Exception;
+    public BoardDto getBoardOne(long boardNo) throws Exception;
 
-    public int writeBoardList(BoardDto boardDto) throws Exception;
+    public BoardDto writeBoard(BoardDto boardDto, Long regUserId) throws Exception;
 
-    public int deleteBoardList(BoardDto boardDto) throws Exception;
+    public boolean deleteBoard(BoardDto boardDto, long userId) throws Exception;
 }

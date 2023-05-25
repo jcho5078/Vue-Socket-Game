@@ -24,10 +24,9 @@ import java.io.IOException;
 public class JwtAuthFilter extends GenericFilterBean {
 
     @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
     private LoginService loginService;
+
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -37,12 +36,24 @@ public class JwtAuthFilter extends GenericFilterBean {
         // 현재 Authentication 정보
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // 토큰 확인 유효 확인
-        if(token != null
-                && token.startsWith(CommonCode.TOKEN_PREFIX)
-                && jwtUtil.validateToken(token)){
+        // 허용 URL 체크
+        boolean isAllowUrl = false;
+        for(int i=0; i < CommonCode.ALLOW_URLS.length; i++){
+            String url = ((HttpServletRequest) request).getRequestURI();
+            String checkUrl = CommonCode.ALLOW_URLS[i];
+            if(url.equals(checkUrl)){
+                isAllowUrl = true;
+                break;
+            }
+        }
 
-            userId = jwtUtil.extractUserId(token);
+        // 토큰 확인 유효 확인
+        if(isAllowUrl == false
+                && token != null
+                && token.startsWith(CommonCode.TOKEN_PREFIX)
+                && JwtUtil.validateToken(token)){
+
+            userId = JwtUtil.extractUserId(token);
             //getPrincipal 과 loadUserByUsername로 불러온 UserDetails 값 비교하기
             //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             UserDetails userDetails = loginService.loadUserByUsername(userId);

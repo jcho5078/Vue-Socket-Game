@@ -2,8 +2,9 @@
   <div class="v-container">
     <h4>header</h4>
     <div v-if="isAuthenticated">
-      <p>userToken : {{userToken}}</p>
+      <p>유저 : {{getUserData.userNm}}</p>
       <button @click="getUserInfo">유저 데이터 확인</button>
+
     </div>
   </div>
 </template>
@@ -15,19 +16,23 @@ export default {
   name: "headerForm",
   data() {
     return {
-      isAuthenticated: (localStorage.getItem('userToken') !== 'null' && localStorage.getItem('userToken') !== null),
-      userToken: localStorage.getItem('userToken')
+      isAuthenticated: (localStorage.userToken !== 'null' && localStorage.userToken !== null),
+      userData: {
+
+      }
+    }
+  },
+  computed : {
+    getUserData(){
+     return JSON.parse(localStorage.userData);
     }
   },
   methods: {
     getUserInfo() {
-      const header = {
-        'content-type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem("userToken"),
-      }
-
-      getUserInfo(header).then(response => {
-        console.log(response.data);
+      getUserInfo().then(response => {
+        alert(response.data);
+      }).catch(error => {
+        console.log('error: ' + error);
       });
     }
   }

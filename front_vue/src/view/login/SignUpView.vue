@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import SignUpForm from "@/components/SignUpForm";
+import SignUpForm from "@/components/user/SignUpForm";
 export default {
   name: "SignUpView",
   components: {SignUpForm}

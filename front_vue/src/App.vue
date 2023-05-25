@@ -1,8 +1,8 @@
 <template>
-    <header-form/>
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+  <header-form/>
+  <keep-alive>
+    <router-view></router-view>
+  </keep-alive>
 </template>
 
 <script>
@@ -44,5 +44,11 @@ button {
 }
 button:hover{
   padding: 3px 6px;
+}
+input[type=text]{
+  border: 1px solid #000000;
+}
+textarea{
+  border: 1px solid #000000;
 }
 </style>

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import {signUp} from '../api/api'
+import {signUp} from '../../api/api'
 
 export default {
   name: "SignUpForm",

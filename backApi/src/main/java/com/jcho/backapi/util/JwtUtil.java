@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public String extractUserId(String token) {
+    public static String extractUserId(String token) {
         token = getReplaceToken(token);
         return extractClaim(token, Claims::getSubject);
     }
@@ -33,7 +34,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    public Date extractExpiration(String token) {
+    public static Date extractExpiration(String token) {
         token = getReplaceToken(token);
         return extractClaim(token, Claims::getExpiration);
     }
@@ -46,7 +47,7 @@ public class JwtUtil {
      * @param <T>
      * @return
      */
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+    public static <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         token = getReplaceToken(token);
         final Claims claims = Jwts.parser().setSigningKey(CommonCode.JWT_KEY.getBytes()).parseClaimsJws(token).getBody();
         String val = claims.toString();//test
@@ -58,7 +59,7 @@ public class JwtUtil {
      * @param token
      * @return
      */
-    private Boolean isTokenExpired(String token) {
+    private static Boolean isTokenExpired(String token) {
         token = getReplaceToken(token);
         return extractExpiration(token).before(new Date());
     }
@@ -68,7 +69,7 @@ public class JwtUtil {
      * @param userId
      * @return
      */
-    public String generateToken(String userId) {
+    public static String generateToken(String userId) {
         Claims claims = Jwts.claims().setSubject(userId);
         Key key = Keys.hmacShaKeyFor(CommonCode.JWT_KEY.getBytes(StandardCharsets.UTF_8));
 
@@ -84,13 +85,32 @@ public class JwtUtil {
      * @param jwtToken
      * @return
      */
-    public boolean validateToken(String jwtToken) {
+    public static boolean validateToken(String jwtToken) {
         jwtToken = getReplaceToken(jwtToken);
         Claims claims = Jwts.parser().setSigningKey(CommonCode.JWT_KEY.getBytes()).parseClaimsJws(jwtToken).getBody();
         return !claims.getExpiration().before(new Date());
     }
 
-    public String getReplaceToken(String jwtToken){
+    public static String getReplaceToken(String jwtToken){
         return jwtToken.replaceAll(CommonCode.TOKEN_PREFIX, "");
+    }
+
+    /**
+     * 헤더 토큰으로부터 userId 반환
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public static Long getUserIdFromToken(HttpServletRequest request) throws Exception{
+        String token = request.getHeader(CommonCode.JWT_HEADER);
+        String userId = null;
+        if(token != null
+                && token.startsWith(CommonCode.TOKEN_PREFIX)
+                && validateToken(token)) {
+
+            userId = extractUserId(token);
+        }
+
+        return Long.parseLong(userId);
     }
 }

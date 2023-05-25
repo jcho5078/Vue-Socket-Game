@@ -15,10 +15,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +25,7 @@ import java.util.logging.Level;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -68,8 +65,10 @@ public class UserController {
      * @return
      */
     @GetMapping("/info")
-    public ResponseEntity<?> getUserInfo(HttpServletRequest request, UserDto userDto) throws Exception {
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request) throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setUserNo(JwtUtil.getUserIdFromToken(request));
 
-        return CommonUtil.responseResult(request, loginService.getUserInfo(userDto));
+        return CommonUtil.responseResult(loginService.getUserInfo(userDto));
     }
 }

@@ -1,6 +1,7 @@
 package com.jcho.backapi.web.user.service.impl;
 
 import com.jcho.backapi.BackApiApplication;
+import com.jcho.backapi.common.CommonCode;
 import com.jcho.backapi.domain.user.User;
 import com.jcho.backapi.domain.user.UserRepository;
 import com.jcho.backapi.util.JwtUtil;
@@ -8,11 +9,15 @@ import com.jcho.backapi.web.user.dto.UserDto;
 import com.jcho.backapi.web.user.service.LoginService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 
 @Service
@@ -20,9 +25,6 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private JwtUtil jwtUtil;
 
     private Logger logger = BackApiApplication.logger;
 
@@ -47,7 +49,10 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public UserDto login(UserDto userDto) throws Exception {
-        UserDto responseDto = UserDto.toDto(userRepository.findUsersByLoginIdAndLoginPw(userDto.getLoginId(), userDto.getLoginPw()));
+        User user = userRepository.findUsersByLoginIdAndLoginPw(userDto.getLoginId(), userDto.getLoginPw());
+        if(user == null) return null;
+
+        UserDto responseDto = UserDto.toDto(user);
 
         responseDto.setLoginPw(null);//hide in response password
 
@@ -55,7 +60,7 @@ public class LoginServiceImpl implements LoginService {
             logger.info("'" + userDto.getLoginId() + "' is not found.\n");
             return null;
         }else{
-            responseDto.setJwtToken(jwtUtil.generateToken(Long.toString(responseDto.getUserNo())));
+            responseDto.setJwtToken(JwtUtil.generateToken(Long.toString(responseDto.getUserNo())));
         }
 
         return responseDto;
@@ -87,10 +92,10 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * 유저정보 반환
-     * @param userDto
      * @return
      * @throws Exception
      */
+    @Override
     public UserDto getUserInfo(UserDto userDto) throws Exception{
         UserDto responseDto = UserDto.toDto(userRepository.findById(userDto.getUserNo()).get());
 

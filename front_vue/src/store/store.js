@@ -1,9 +1,10 @@
 import {createStore} from 'vuex';
 
 export default createStore({
-    state: {
-        counter: 10,
-        auth: ''
+    state() {
+        return {
+            counter: 10
+        }
     },
     getters: {
         time2(state) {
@@ -11,8 +12,8 @@ export default createStore({
         }
     },
     mutations: {
-        setCounter(state, value) {
-            state.counter = value;
+        setCounter(state, payload) {
+            state.counter += payload.value;
         }
     }
 });

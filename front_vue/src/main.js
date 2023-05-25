@@ -33,6 +33,8 @@ GameData.pause();
 GameData.onHidden();*/
 
 router.beforeEach((to, from, next) => {
+    console.log(from);
+    console.log(to);
     return next();
 });
 

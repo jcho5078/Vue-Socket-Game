@@ -1,5 +1,6 @@
 package com.jcho.backapi.config;
 
+import com.jcho.backapi.common.CommonCode;
 import com.jcho.backapi.filter.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,9 +42,10 @@ public class SercurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //.headers().frameOptions().disable().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/user/login", "/user/signUp", "/user/info", "/board/list", "/board/view").permitAll()
-                .requestMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**")
-                .hasAnyRole("AUTH").anyRequest().authenticated();
+                .requestMatchers(CommonCode.ALLOW_URLS).permitAll()
+                .requestMatchers(CommonCode.AUTH_URLS).permitAll()
+                //.hasAnyRole("AUTH").anyRequest().authenticated()
+                ;
     }
 
 }
