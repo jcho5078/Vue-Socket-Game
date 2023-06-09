@@ -5,7 +5,7 @@
 </template>
 
 <script>
-//import {Phaser, PlayGame, config} from '@/assets/game'
+import {Phaser, PlayGame, config} from '@/assets/game'
 
 // eslint-disable-next-line no-unused-vars
 //import {GameData} from '@/assets/game'
@@ -15,15 +15,15 @@ export default {
   created() {
     const gameView = document.querySelector('canvas');
     document.getElementById('gameDiv').appendChild(gameView);
-    //this.showGame();
+    this.showGame();
 
-   /* const gameScene = new PlayGame();
+    const gameScene = new PlayGame();
     gameScene.userName = '';
     config.scene = [gameScene];
     const GameData = new Phaser.Game(config);
 
     GameData.pause();
-    GameData.onHidden();*/
+    GameData.onHidden();
   },
   beforeUnmount() {
     this.hideGame();

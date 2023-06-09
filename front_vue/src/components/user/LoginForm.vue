@@ -43,6 +43,8 @@ export default {
           console.log("userToken in localStroage : " + localStorage.getItem("userToken"));
           this.$router.push('/');
         }
+      }).catch(error => {
+        alert('로그인 실패: ' + error);
       });
     }
   }

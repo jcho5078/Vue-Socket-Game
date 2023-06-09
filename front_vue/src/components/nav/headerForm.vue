@@ -30,7 +30,7 @@ export default {
   methods: {
     getUserInfo() {
       getUserInfo().then(response => {
-        alert(response.data);
+        console.log(response.data.responseDto);
       }).catch(error => {
         console.log('error: ' + error);
       });

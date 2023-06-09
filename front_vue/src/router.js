@@ -1,8 +1,8 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 import Intro from "@/view/IntroView";
-import GameView from "@/components/GameView";
-import ChatView from "@/components/ChatView";
+import GameView from "@/view/game/GameView";
+import ChatView from "@/view/chat/ChatView";
 import LoginView from "@/view/login/LoginView";
 import SignUpView from "@/view/login/SignUpView";
 import BoardDetail from "@/components/board/BoardDetail";

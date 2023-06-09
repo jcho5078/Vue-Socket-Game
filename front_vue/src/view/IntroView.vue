@@ -11,11 +11,13 @@
 </template>
 
 <script>
+import {isEmpty} from "@/common/commonUtil";
+
 export default {
   name: "IntroView",
   data() {
     return {
-      isAuthenticated: (localStorage.getItem('userToken') !== 'null' && localStorage.getItem('userToken') !== null),
+      isAuthenticated: !isEmpty((localStorage.getItem('userToken'))),
     }
   },
   methods: {

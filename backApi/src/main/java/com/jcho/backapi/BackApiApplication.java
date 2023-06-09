@@ -28,8 +28,11 @@ public class BackApiApplication {
     @Autowired
     private UserRepository userRepository;
 
-    @Value("${front-server.url}")
-    private String frontURL;
+    @Value("${front-server.local-url}")
+    private String frontLocalURL;
+
+    @Value("${front-server.container-url}")
+    private String frontConURL;
 
     public static final Logger logger = LoggerFactory.getLogger(BackApiApplication.class);
 
@@ -49,7 +52,7 @@ public class BackApiApplication {
                 registry.addMapping("/**")
                         .allowCredentials(true)
                         .allowedMethods("*")
-                        .allowedOrigins(frontURL);
+                        .allowedOrigins(frontLocalURL, frontConURL);
             }
         };
     }
