@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {viewBoardDetail, writeBoard} from '@/api/api';
+import {viewBoardDetail, writeBoard} from '@/api/backend';
 import {isEmpty} from "@/common/commonUtil";
 
 export default {

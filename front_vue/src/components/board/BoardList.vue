@@ -2,10 +2,10 @@
   <table class="boardTable">
     <thead>
     <tr>
-      <th>No</th>
-      <th>제목</th>
-      <th>작성자</th>
-      <th>작성일자</th>
+      <th style="width: 5%;">No</th>
+      <th style="width: 70%;">제목</th>
+      <th style="width: 15%;">작성자</th>
+      <th style="width: 10%;">작성일자</th>
     </tr>
     </thead>
     <tbody>
@@ -18,7 +18,7 @@
       <td>{{ board.boardNo }}</td>
       <td>{{ board.boardTitle }}</td>
       <td>{{ board.regUserNm }}</td>
-      <td>{{ board.regDt }}</td>
+      <td>{{ board.regDt[0] + '.' + board.regDt[1] + '.' + board.regDt[2] + ' ' + board.regDt[3] + ':' + board.regDt[4] }}</td>
     </tr>
     </tbody>
   </table>
@@ -27,7 +27,7 @@
 
 <script>
 import {isEmpty} from "@/common/commonUtil";
-import {viewBoardList} from "@/api/api";
+import {viewBoardList} from "@/api/backend";
 
 export default {
   name: "BoardList",

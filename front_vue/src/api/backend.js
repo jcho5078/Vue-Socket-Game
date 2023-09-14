@@ -1,7 +1,11 @@
 import axios from 'axios'
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 let connect = axios.create({
-    headers: {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET', 'withCredentials' : true, "Authorization": 'Bearer '+localStorage.userToken},
+    headers: {'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET', 'withCredentials' : true,
+        "Authorization": 'Bearer '+localStorage.userToken,
+    },
     baseURL: process.env.VUE_APP_API_ENDPOINT
 });
 
@@ -32,7 +36,7 @@ function getUserInfo(){
     return connect.get('/user/info', {
         headers: {
             'content-type': 'application/json',
-            /*'Authorization': 'Bearer '+localStorage.getItem("userToken"),*/
+            'Authorization': 'Bearer '+localStorage.getItem("userToken"),
         },
         params: {
 

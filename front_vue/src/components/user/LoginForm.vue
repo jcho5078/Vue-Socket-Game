@@ -14,7 +14,7 @@
 
 <script>
 import {isEmpty} from '@/common/commonUtil'
-import {login} from '@/api/api'
+import {login} from '@/api/backend'
 
 export default {
   name: "LoginForm",
@@ -29,6 +29,7 @@ export default {
   methods: {
     doLogin(){
       login(this.loginData).then(response => {
+
 
         console.log(response);
         if(response.status != 200){

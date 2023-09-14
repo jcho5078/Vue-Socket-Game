@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {viewBoardDetail} from "@/api/api";
+import {viewBoardDetail} from "@/api/backend";
 import {isEmpty} from "@/common/commonUtil";
 
 export default {

@@ -2,9 +2,10 @@ const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
+    headers: { "Access-Control-Allow-Origin": "*" },
     proxy: {
-      api: {
-        target: process.env.VUE_APP_API_ENDPOINT,
+      backend: {
+        target: 'http://localhost:8080/',
         ws: true,
         changeOrigin: true
       },
@@ -17,3 +18,9 @@ module.exports = defineConfig({
     }
   }
 })
+
+/*module.exports = {
+  devServer: {
+    proxy: 'http://localhost:8080'
+  }
+}*/

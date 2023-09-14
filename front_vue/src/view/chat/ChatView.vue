@@ -15,6 +15,7 @@ export default {
   created() {
     socket.on('connection', socket => {
       console.log(socket);
+      alert("게임서버 연결에 실패했습니다.\n");
     });
     socket.on('chat', (data) => {
       this.textarea += data + '\n';

@@ -18,5 +18,5 @@ spring:
     generate-ddl: true
 
 front-server:
-  local-url: http://localhost:80
+  local-url: http://localhost:8081
   container-url: http://localhost
