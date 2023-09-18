@@ -54,8 +54,8 @@ services:
   socket: # 미완성
     ports:
       - 3000:3000
-    build:
-      dockerfile: ./socket_server/Dockerfile
+    build: ./socket_server
+    restart: unless-stopped
     networks:
       - net
 networks:

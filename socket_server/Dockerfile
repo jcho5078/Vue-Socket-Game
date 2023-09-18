@@ -1,17 +1,18 @@
-FROM node:16
+FROM node:16-alpine3.11
 
 # WORKDIR /usr/src/app
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /socket_server
 
 # install package
-# COPY /package.json ./
-COPY ./socket_server/package.json /usr/src/app/
+COPY package.json .
+#COPY ./socket_server/package.json /app/
 RUN npm install
 
 # copy source
-COPY . ./
+#COPY ./socket_server /app
+COPY . .
 
 # bind port & run
 EXPOSE 3000
-CMD ["node", "app.js"]
+#CMD ["node", "app.js"]
+CMD npm start
