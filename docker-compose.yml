@@ -39,6 +39,8 @@ services:
     networks:
       - net
   front:
+    depends_on:
+      - back
     ports:
       - 80:80
     build:
@@ -50,7 +52,6 @@ services:
     networks:
       - net
   socket: # 미완성
-    image: jitesoft/node-yarn
     ports:
       - 3000:3000
     build:

@@ -37,10 +37,24 @@ export default {
         if(response.status != 200){
           alert('Error : ' + response.data.msg);
         }else{
-          localStorage.setItem('userData', response.data.responseDto);
+          /**
+          const userData = JSON.parse(response.data.responseDto);
+          this.$store.commit('setUserData', userData);
+
           localStorage.setItem('userToken', response.data.jwtToken);
           console.log("userToken in localStroage : " + localStorage.getItem("userToken"));
           this.$router.push('/');
+           **/
+          if (window.confirm('회원가입이 완료되었습니다.\n로그인해주십시오.'))
+          {
+            // They clicked Yes
+            this.$router.push('/');
+          }
+          else
+          {
+            // They clicked no
+            this.$router.push('/');
+          }
         }
       });
     }

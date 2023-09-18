@@ -39,8 +39,8 @@ export default {
   computed: {
     checkUser(){
       let result = false;
-      if(!isEmpty(JSON.parse(localStorage.userData))){
-        if(this.regUser === JSON.parse(localStorage.userData).userNo) result = true;
+      if(!isEmpty(this.$store.state.userData)){
+        if(this.regUser === this.$store.state.userData.userNo) result = true;
       }
       return result;
     }

@@ -2,7 +2,6 @@
     <div>
       <h3>게시물</h3>
       <board-list/>
-      {{this.$store.state.counter}}
     </div>
 </template>
 

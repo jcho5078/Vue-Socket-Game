@@ -1,0 +1,10 @@
+{
+  "userNo":1,
+  "loginId":"test1",
+  "loginPw":null,
+  "userNm":"철수",
+  "regDt":null,
+  "lastLoginDt":null,
+  "jwtToken":"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjk0NjcyMzQyLCJleHAiOjE2OTQ3MDgzNDJ9.x3isUEToOY72S5OcSCUJ2dZ2GUzdZU5VwC1ZzgqJGDI",
+  "valid":false
+}

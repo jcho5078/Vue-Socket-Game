@@ -5,20 +5,19 @@
     </div>
 
     <div class="header-center">
-      <button @click="moveGame">Move to Game</button><br>
-      <button @click="moveChat">Move to Chat</button><br>
-      <button @click="moveBoard">Move to Board</button><br>
+<!--      <button @click="moveGame">Move to Game</button>-->
+      <button @click="moveBoard">게시판</button>
     </div>
 
     <div class="header-right">
-      <div class="userInfoDiv" v-if="isAuthenticated">
-        <p class="userNm">유저 : {{getUserData.userNm}}</p>
+      <div class="userInfoDiv" v-if="getUserData.userNm != null ? true : false">
+        <p class="userNm">유저 : {{getUserData.userNm != null ? getUserData.userNm : ''}}</p>
         <button @click="getUserInfo">유저 데이터 확인</button>
         <button @click="doLogout">logout</button>
       </div>
       <div class="userInfoDiv" v-else>
-        <button @click="moveLogin">Move to Login</button><br>
-        <button @click="moveSignUp">Move to SignUp</button><br>
+        <button @click="moveLogin">Move to Login</button>
+        <button @click="moveSignUp">Move to SignUp</button>
       </div>
     </div>
   </div>
@@ -32,16 +31,23 @@ export default {
   name: "headerForm",
   data() {
     return {
-      isAuthenticated: isEmpty((localStorage.getItem('userToken'))) == false ? true : false,
-      userData: {
-
-      }
+      test: JSON.stringify(this.$store.state.userData)
     }
   },
   computed : {
     getUserData(){
-     return JSON.parse(localStorage.userData);
-    }
+      const userData = this.$store.state.userData;
+      return isEmpty(userData) ? {
+        "userNo": null,
+        "loginId": null,
+        "loginPw":null,
+        "userNm": null,
+        "regDt":null,
+        "lastLoginDt": null,
+        "jwtToken": null,
+        "valid": null
+      } : userData;
+    },
   },
   methods: {
     getUserInfo() {
@@ -52,7 +58,7 @@ export default {
       });
     },
     doLogout(){
-      localStorage.removeItem("userToken");
+      this.$store.commit('resetUserData');
       location.reload();
     },
     moveIntro(){
@@ -60,9 +66,6 @@ export default {
     },
     moveGame(){
       this.$router.push('/game');
-    },
-    moveChat(){
-      this.$router.push('/chat');
     },
     moveBoard(){
       this.$router.push('/board');

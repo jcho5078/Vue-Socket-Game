@@ -1,5 +1,6 @@
 <template>
   <header-form/>
+  <chat-form/>
   <keep-alive>
     <router-view></router-view>
   </keep-alive>
@@ -8,10 +9,11 @@
 <script>
 
 import HeaderForm from "@/components/nav/headerForm";
+import ChatForm from "@/components/chat/ChatForm";
 
 export default {
   name: 'App',
-  components: {HeaderForm},
+  components: {HeaderForm, ChatForm},
   methods: {
     hideGame (){
       document.querySelector('canvas').hidden = true;
@@ -19,8 +21,17 @@ export default {
   },
   beforeMount() {
     //this.hideGame();
-
+    window.onkeydown = (e) => {
+      if(e.key == 'Control' && document.querySelector('msg-chat') != null){
+        var chatFocus = document.getElementById('msg-chat');
+        chatFocus.focus();
+        chatFocus.value = '';
+      }
+    }
     console.log(this.$cookies);
+  },
+  mounted() {
+    this.$store.dispatch("loadStateFromStorage");
   }
 }
 </script>

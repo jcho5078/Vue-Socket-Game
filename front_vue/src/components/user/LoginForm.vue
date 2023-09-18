@@ -39,7 +39,11 @@ export default {
           alert('ID, PW가 틀립니다.');
         }else{
           console.log(response.data.responseDto.jwtToken);
-          localStorage.setItem('userData', JSON.stringify(response.data.responseDto));
+          const userData = response.data.responseDto;
+          localStorage.setItem('localUserData', JSON.stringify(userData));
+          this.$store.commit('callUserDataLocalStorage');
+
+
           localStorage.setItem('userToken', response.data.responseDto.jwtToken);
           console.log("userToken in localStroage : " + localStorage.getItem("userToken"));
           this.$router.push('/');

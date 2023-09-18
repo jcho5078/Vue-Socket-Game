@@ -29,13 +29,92 @@ var io = require('socket.io')(server, {
 });
 
 server.listen(port);
+var players = new Array();
+var bullets = new Array();
 
+/**
+ * logic
+ */
 io.on('connection', socket => {
   console.log(socket.nsp.sockets);
+
+  /**
+   * chat
+   */
   socket.on('chat', message => {
     console.log(message);
     io.emit('chat', message);
-  })
+  });
+
+  let gameTempData = '';
+
+  /**
+   * game
+   */
+  socket.on('gameUpdate', data => {
+    /**{
+      "userName": null,
+      "userNo": null,
+      "state": update, bullet, conn,
+      "shipX": null,
+      "shipY": null,
+      "shipRotation": null,
+      "userNameX": null,
+      "userNameY": null,
+    }*/
+
+    if(players.length < 1 || players[data.userNo] == null){
+      console.log('conn : ' + JSON.stringify(data));
+      players[data.userNo] = data;
+      socket.emit('currentPlayers', players);
+    }else{
+      //console.log('update : ' + JSON.stringify(data));
+      players[data.userNo].userName = data.userName;
+      players[data.userNo].userNo = data.userNo;
+      players[data.userNo].shipX = data.shipX;
+      players[data.userNo].shipY = data.shipY;
+      players[data.userNo].shipRotation = data.shipRotation;
+      players[data.userNo].userNameX = data.userNameX;
+      players[data.userNo].userNameY = data.userNameY;
+
+      io.emit('gameUpdated', players[data.userNo]);
+    }
+  });
+
+  socket.on('bulletUpdate', data => {
+    /*{
+        "userNo" : userNo,
+        "state": /!* create, die *!/
+        "angle": angle,
+        "x": x,
+        "y": y,
+    }*/
+    /*console.log('bullet : ' + JSON.stringify(data));
+    if(data != null && data.state == 'die'){
+      bullets[data.userNo] = null;
+    }else{
+      bullets[data.userNo] = data;
+    }
+    console.log('bullets : ' + JSON.stringify(bullets));
+    io.emit('bulletUpdated', bullets);*/
+
+    console.log('bullets : ' + JSON.stringify(data));
+    io.emit('bulletUpdated', data);
+
+  });
+
+  socket.on('gameConn', data => {
+    players[data.userNo] = data;
+    console.log('gameConn : ' + JSON.stringify(data));
+    socket.emit('currentPlayers', players);
+  });
+
+  socket.on('disconn', function (userNo) {
+    console.log('player [' + socket.id + '-'+userNo + '] disconnected');
+    delete players[userNo];
+    io.emit('playerDisconnected', userNo);
+  });
+
 });
 
 /**

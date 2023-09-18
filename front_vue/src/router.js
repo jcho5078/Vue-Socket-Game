@@ -1,8 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 import Intro from "@/view/IntroView";
-import GameView from "@/view/game/GameView";
-import ChatView from "@/view/chat/ChatView";
+import RankView from "@/view/board/RankView";
 import LoginView from "@/view/login/LoginView";
 import SignUpView from "@/view/login/SignUpView";
 import BoardDetail from "@/components/board/BoardDetail";
@@ -17,12 +16,8 @@ const router = createRouter({
             component: Intro
         },
         {
-            path: '/game',
-            component: GameView
-        },
-        {
-            path: '/chat',
-            component: ChatView
+            path: '/rank',
+            component: RankView
         },
         {
             path: '/board',

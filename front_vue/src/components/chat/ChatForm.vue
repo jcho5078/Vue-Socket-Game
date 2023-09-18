@@ -1,17 +1,20 @@
 <template>
   <div class="chat-box" v-auto-scroll>
-    <div class="view-chat" v-html="textarea" disabled ></div>
-    <div class="msg-box">
+    <div class="view-chat" v-html="textarea" v-auto-scroll disabled ></div>
+    <div class="msg-box" v-if="getUserData.userNm != null ? true : false">
       <label>Your Message</label>
-      <input type="text" v-model="message" v-auto-scroll style="width: 100%;"/>
+      <input id="msg-chat" type="text" v-model="message" @keypress.enter="sendMessage" v-auto-scroll style="width: 100%;"/>
       <button class="md-primary md-raised" @click="sendMessage">Submit</button>
     </div>
+    <div class="msg-box" v-else>
+      <label>로그인 해주세요</label>
+    </div>
   </div>
-  <br>
 </template>
 
 <script>
-import {socket} from "@/assets/socket";
+import {socket} from "@/js/socket";
+import {isEmpty} from "@/common/commonUtil";
 
 export default {
   name: "ChatForm",
@@ -23,7 +26,7 @@ export default {
     socket.on('chat', (data) => {
       //this.textarea += data + '\n';
 
-      const userData = JSON.parse(localStorage.getItem('userData'));
+      const userData = this.$store.state.userData;
       let msg = '';
       let nmColor = '';
       let align = '';
@@ -53,11 +56,27 @@ export default {
       message: '',
     }
   },
+  computed : {
+    getUserData(){
+      const userData = this.$store.state.userData;
+      return isEmpty(userData) ? {
+        "userNo": null,
+        "loginId": null,
+        "loginPw":null,
+        "userNm": null,
+        "regDt":null,
+        "lastLoginDt": null,
+        "jwtToken": null,
+        "valid": null
+      } : userData;
+    }
+  },
   methods: {
     sendMessage() {
+      if(this.message.length == 0) return;
       let data = '';
       let msg = this.message.replaceAll(/(\n|\r\n)/g, '<br>');
-      const userData = JSON.parse(localStorage.getItem('userData'));
+      const userData = this.$store.state.userData;
       let userNo = userData.userNo;
       let userNm = userData.userNm;
 
@@ -86,6 +105,7 @@ export default {
   .view-chat{
     border-bottom: 0.5px ridge black;
     height: 90%;
+    overflow:scroll;
   }
   .msg-box {
     display: flex;

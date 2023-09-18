@@ -36,7 +36,7 @@ export default {
         boardNo: this.$route.params.boardNo,
         boardTitle: '',
         boardDetail: '',
-        userNo: localStorage.getItem('userData').userNo
+        userNo: this.$store.state.userData.userNo
       }
     }
   },
