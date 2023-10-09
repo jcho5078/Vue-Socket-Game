@@ -1,14 +1,17 @@
 <template>
   <div id="rankDiv">
-
+    <rank-list/>
   </div>
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
+import RankList from "@/components/game/RankList";
 
 export default {
   name: "RankView",
+  components: {
+    RankList
+  },
   created() {
 
   },

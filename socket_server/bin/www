@@ -9,6 +9,31 @@ var debug = require('debug')('socket-server:server');
 var http = require('http');
 const {Server} = require("socket.io");
 
+const { Kafka } = require('kafkajs')
+
+const kafka = new Kafka({
+  clientId: 'socket',
+  brokers: ['localhost:29092'],
+})
+
+const producer = kafka.producer()
+
+const run = async (param) => {
+  // Producing
+  await producer.connect()
+
+  await producer.send({
+    topic: 'game',
+    messages: [
+      {
+        value: param,
+      },
+    ],
+  })
+  console.log("writes: ", param);
+}
+run('nothing').catch(console.error)
+
 /**
  * Get port from environment and store in Express.
  */
@@ -29,8 +54,8 @@ var io = require('socket.io')(server, {
 });
 
 server.listen(port);
-var players = new Array();
-var bullets = new Array();
+var players = {};
+var bullets = {};
 
 /**
  * logic
@@ -53,66 +78,89 @@ io.on('connection', socket => {
    */
   socket.on('gameUpdate', data => {
     /**{
+      "socketId" : socket.id,
       "userName": null,
       "userNo": null,
-      "state": update, bullet, conn,
       "shipX": null,
       "shipY": null,
       "shipRotation": null,
       "userNameX": null,
       "userNameY": null,
     }*/
+    if(players[socket.id] != null){
+      players[socket.id].userName = data.userName;
+      players[socket.id].userNo = data.userNo;
+      players[socket.id].shipX = data.shipX;
+      players[socket.id].shipY = data.shipY;
+      players[socket.id].shipRotation = data.shipRotation;
+      players[socket.id].userNameX = data.userNameX;
+      players[socket.id].userNameY = data.userNameY;
+      players[socket.id].socketId = socket.id;
 
-    if(players.length < 1 || players[data.userNo] == null){
-      console.log('conn : ' + JSON.stringify(data));
-      players[data.userNo] = data;
-      socket.emit('currentPlayers', players);
-    }else{
-      //console.log('update : ' + JSON.stringify(data));
-      players[data.userNo].userName = data.userName;
-      players[data.userNo].userNo = data.userNo;
-      players[data.userNo].shipX = data.shipX;
-      players[data.userNo].shipY = data.shipY;
-      players[data.userNo].shipRotation = data.shipRotation;
-      players[data.userNo].userNameX = data.userNameX;
-      players[data.userNo].userNameY = data.userNameY;
-
-      io.emit('gameUpdated', players[data.userNo]);
+      socket.broadcast.emit('gameUpdated', players[socket.id]);
     }
   });
 
   socket.on('bulletUpdate', data => {
-    /*{
+    /**{
         "userNo" : userNo,
-        "state": /!* create, die *!/
         "angle": angle,
         "x": x,
         "y": y,
     }*/
-    /*console.log('bullet : ' + JSON.stringify(data));
-    if(data != null && data.state == 'die'){
-      bullets[data.userNo] = null;
-    }else{
-      bullets[data.userNo] = data;
-    }
-    console.log('bullets : ' + JSON.stringify(bullets));
-    io.emit('bulletUpdated', bullets);*/
-
-    console.log('bullets : ' + JSON.stringify(data));
-    io.emit('bulletUpdated', data);
-
+    console.log('bullet : ' + JSON.stringify(data));
+    socket.broadcast.emit('bulletUpdated', data);
   });
 
   socket.on('gameConn', data => {
-    players[data.userNo] = data;
-    console.log('gameConn : ' + JSON.stringify(data));
-    socket.emit('currentPlayers', players);
+    data.socketId = socket.id;
+    players[socket.id] = data;
+    console.log('gameConn : ' + JSON.stringify(data) + ' - players : ' + JSON.stringify(players));
+
+    socket.emit('currentPlayers', players); // load current users
+    socket.broadcast.emit('newPlayer', players[socket.id]); // submit login sign to other player
   });
 
-  socket.on('disconn', function (userNo) {
-    console.log('player [' + socket.id + '-'+userNo + '] disconnected');
-    delete players[userNo];
-    io.emit('playerDisconnected', userNo);
+  socket.on('hitByBullet', function(data) {
+    /**
+     hitData = {
+        "bulletUserNo" : objB.userNo,
+        "shipUserNo" : objA.userNo,
+      };
+     */
+    let bulletUserNo = data.bulletUserNo;
+    let shipUserNo = data.shipUserNo;
+    Object.keys(players).forEach(function(socketId) {
+      if(players[socketId].userNo == bulletUserNo){
+        console.log('bullet Master : ' + JSON.stringify(players[socketId]));
+        // 이벤트 전달
+        let eventData = {
+          bulletUserNo: bulletUserNo,
+          shipUserNo: shipUserNo
+        }
+        run(JSON.stringify(eventData)).catch(console.error)
+      }
+    });
+    Object.keys(players).forEach(function(socketId) {
+      if(players[socketId].userNo == shipUserNo){
+        console.log('hitByBullet : ' + JSON.stringify(players[socketId]));
+        socket.broadcast.emit('hitUpdate', players[socketId]);
+        players[socketId] = null;
+        delete players[socketId];
+      }
+    });
+  });
+
+  socket.on('disconnect', function () {
+    var data = players[socket.id];
+    console.log('player [' + socket.id +'] disconnected : ' + JSON.stringify(data));
+    if(data != null) {
+      console.log('disconnected1 : ' + JSON.stringify(players));
+      players[socket.id] = null;
+      console.log('disconnected2 : ' + JSON.stringify(players));
+      io.emit('playerDisconnected', data.userNo);
+    }
+    delete players[socket.id];
   });
 
 });

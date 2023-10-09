@@ -6,7 +6,19 @@ let connect = axios.create({
         'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET', 'withCredentials' : true,
         "Authorization": 'Bearer '+localStorage.userToken,
     },
-    baseURL: process.env.VUE_APP_API_ENDPOINT
+    baseURL: "http://localhost:8080"
+});
+
+connect.interceptors.response.use(function (response) {
+    return response;
+}, function (error) {
+    console.log(error);
+    if(error.response.data.message.indexOf('JWT expired at') != -1 || error.response.status == 401){
+        if (window.confirm("로그인 만료")) {
+            location.href = '/';
+        }
+    }
+    return Promise.reject(error);
 });
 
 /**
@@ -84,6 +96,44 @@ function writeBoard(param){
     return connect.post('/board/write', param);
 }
 
+/**
+ * 댓글작성
+ * @param param
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+function writeBoardComment(param){
+    return connect.post('/board/comment/write', param);
+}
+
+/**
+ * 댓글삭제
+ * @param param
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+function deleteBoardComment(param){
+    return connect.post('/board/comment/delete', param);
+}
+
+/**
+ * 랭킹 목록
+ * @param param
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+function viewRankList(page, size){
+    return connect.get('/game/rank', {
+        headers: {
+            /*'content-type': 'application/json',
+            "Authorization": 'Bearer ' + localStorage.getItem("userToken")*/
+        },
+        params: {
+            page: page,
+            size: size
+        }
+    }).catch(error => {
+        console.log(error);
+    });
+}
+
 export {
     login,
     signUp,
@@ -91,4 +141,7 @@ export {
     viewBoardList,
     viewBoardDetail,
     writeBoard,
+    writeBoardComment,
+    deleteBoardComment,
+    viewRankList,
 }

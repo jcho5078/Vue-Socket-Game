@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

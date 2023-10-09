@@ -2,6 +2,7 @@ package com.jcho.backapi.web.board.controller;
 
 import com.jcho.backapi.common.CommonCode;
 import com.jcho.backapi.util.JwtUtil;
+import com.jcho.backapi.web.board.dto.BoardCommentDto;
 import com.jcho.backapi.web.board.dto.BoardDto;
 import com.jcho.backapi.web.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class BoardController {
     public ResponseEntity<BoardDto> getBoard(@PathVariable String boardNo) throws Exception{
 
         BoardDto result = boardService.getBoardOne(Long.parseLong(boardNo));
+        List<BoardCommentDto> comments = boardService.getBoardCommentList(Long.parseLong(boardNo));
+
+        result.setBoardComments(comments);
 
         return ResponseEntity.ok(result);
     }
@@ -50,6 +54,24 @@ public class BoardController {
         long userId = JwtUtil.getUserIdFromToken(request);
 
         boolean result = boardService.deleteBoard(boardDto, userId);
+
+        return ResponseEntity.ok(result?1:0);
+    }
+
+    @PostMapping("/comment/write")
+    public ResponseEntity<List<BoardCommentDto>> writeBoardComment(HttpServletRequest request, @RequestBody BoardCommentDto boardCommentDto) throws Exception{
+        long userId = JwtUtil.getUserIdFromToken(request);
+        boardService.writeBoardComment(boardCommentDto, userId);
+        List<BoardCommentDto> comments = boardService.getBoardCommentList(boardCommentDto.getBoardNo());
+
+        return ResponseEntity.ok(comments);
+    }
+
+    @PostMapping("/comment/delete")
+    public ResponseEntity<Integer> deleteBoardComment(HttpServletRequest request, @RequestBody BoardCommentDto boardCommentDto) throws Exception{
+        long userId = JwtUtil.getUserIdFromToken(request);
+
+        boolean result = boardService.deleteBoardComment(boardCommentDto, userId);
 
         return ResponseEntity.ok(result?1:0);
     }

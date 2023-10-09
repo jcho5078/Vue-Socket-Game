@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -20,6 +21,8 @@ public class BoardDto implements Serializable {
     private Long regUser;
     private String regUserNm;
 
+    private List<BoardCommentDto> boardComments;
+
     public static BoardDto toDto(Board board){
         return BoardDto.builder()
                 .boardNo(board.getBoardNo())
@@ -28,6 +31,7 @@ public class BoardDto implements Serializable {
                 .regDt(board.getRegDt())
                 .modDt(board.getModDt())
                 .regUser(board.getRegUser().getUserNo())
+                .regUserNm(board.getRegUser().getUserNm())
                 .build();
     }
 }

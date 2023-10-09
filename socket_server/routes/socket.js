@@ -2,20 +2,20 @@ var app = require('express')();
 var server = require('http').createServer(app);
 import { Server } from 'socket.io'
 
-const io = new Server(http, {
+/*const io = new Server(http, {
     cors: {
-        origin: ['http://localhost:8080'],
+        origin: ['http://localhost:8080', 'http://localhost', 'http://ec2-13-125-51-108.ap-northeast-2.compute.amazonaws.com/'],
         credentials: true,
     },
     allowEIO3: true,
-})
+})*/
 
-io.on('chat', (data) => {
+/*io.on('chat', (data) => {
     console.log(data);
     io.emit('chat', data);
-});
+});*/
 
-io.on('connection', (socket) => {
+/*io.on('connection', (socket) => {
     console.log('a user connected');
     socket.on('send', message => {
         messages.push(message)
@@ -24,11 +24,11 @@ io.on('connection', (socket) => {
     socket.on('chat', (data) => {
         console.log(data);
     });
-});
+});*/
 
-server.listen(3000, () => {
+/*server.listen(3000, () => {
     console.log('listening on *:3000');
-});
+});*/
 
 //connection event handler
 /*io.on('connection' , function(socket) {

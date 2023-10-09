@@ -3,6 +3,9 @@ package com.jcho.backapi.filter;
 import com.jcho.backapi.common.CommonCode;
 import com.jcho.backapi.util.JwtUtil;
 import com.jcho.backapi.web.user.service.LoginService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
@@ -48,21 +52,33 @@ public class JwtAuthFilter extends GenericFilterBean {
         }
 
         // 토큰 확인 유효 확인
-        if(isAllowUrl == false
-                && token != null
-                && token.startsWith(CommonCode.TOKEN_PREFIX)
-                && JwtUtil.validateToken(token)){
+        try {
+            if(isAllowUrl == false
+                    && token != null
+                    && token.startsWith(CommonCode.TOKEN_PREFIX)
+                    && JwtUtil.validateToken(token)){
 
-            userId = JwtUtil.extractUserId(token);
-            //getPrincipal 과 loadUserByUsername로 불러온 UserDetails 값 비교하기
-            //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            UserDetails userDetails = loginService.loadUserByUsername(userId);
+                userId = JwtUtil.extractUserId(token);
+                //getPrincipal 과 loadUserByUsername로 불러온 UserDetails 값 비교하기
+                //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                UserDetails userDetails = loginService.loadUserByUsername(userId);
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, authentication.getCredentials(), userDetails.getAuthorities());
-            usernamePasswordAuthenticationToken.setDetails(authentication);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, authentication.getCredentials(), userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(authentication);
+            }
+        } catch (SignatureException | MalformedJwtException e) {
+            ((HttpServletResponse) response).sendError(401, "SignatureException error");
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            // 유효기간 지남
+            ((HttpServletResponse) response).sendError(401, "ExpiredJwtException error");
+            filterChain.doFilter(request, response);
+        } catch(Exception e) {
+            SecurityContextHolder.clearContext();
+            filterChain.doFilter(request, response);
         }
 
         /*if(token != null && jwtUtil.validateToken(token)){

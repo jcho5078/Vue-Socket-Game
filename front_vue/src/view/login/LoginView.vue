@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h3>LOGIN</h3>
+      <h3 class="page_nm">LOGIN</h3>
       <login-form/>
     </div>
 </template>

@@ -1,8 +1,9 @@
 package com.jcho.backapi;
 
+import com.jcho.backapi.domain.game.GameLog;
+import com.jcho.backapi.domain.game.GameLogRepository;
 import com.jcho.backapi.domain.user.User;
 import com.jcho.backapi.domain.user.UserRepository;
-import com.jcho.backapi.util.JwtUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,14 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,12 +24,21 @@ public class BackApiApplication {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private GameLogRepository gameLogRepository;
+
 
     @Value("${front-server.local-url}")
     private String frontLocalURL;
 
     @Value("${front-server.container-url}")
     private String frontConURL;
+
+    @Value("${front-server.socket-url}")
+    private String socketURL;
+
+    @Value("${front-server.cloud-server}")
+    private String cloudURL;
 
     public static final Logger logger = LoggerFactory.getLogger(BackApiApplication.class);
 
@@ -53,7 +59,7 @@ public class BackApiApplication {
                         .allowCredentials(false)
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowedOrigins(frontLocalURL, frontConURL);
+                        .allowedOrigins(frontLocalURL, frontConURL, socketURL, cloudURL, "*");
             }
         };
     }
@@ -85,5 +91,13 @@ public class BackApiApplication {
                 , new User("test3", "123", "옥희")
         ).collect(Collectors.toList());
         userRepository.saveAll(userList);
+
+        List<GameLog> gameLogs = Stream.of(
+                new GameLog(1, 2)
+                , new GameLog(1, 3)
+                , new GameLog(2, 3)
+        ).collect(Collectors.toList());
+
+        gameLogRepository.saveAll(gameLogs);
     }
 }

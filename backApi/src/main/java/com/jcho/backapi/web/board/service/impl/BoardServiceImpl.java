@@ -1,16 +1,21 @@
 package com.jcho.backapi.web.board.service.impl;
 
 import com.jcho.backapi.domain.board.Board;
+import com.jcho.backapi.domain.board.BoardComment;
+import com.jcho.backapi.domain.board.BoardCommentRepository;
 import com.jcho.backapi.domain.board.BoardRepository;
+import com.jcho.backapi.domain.board.cpKey.BoardCommentKey;
 import com.jcho.backapi.domain.user.User;
 import com.jcho.backapi.domain.user.UserRepository;
+import com.jcho.backapi.web.board.dto.BoardCommentDto;
 import com.jcho.backapi.web.board.dto.BoardDto;
 import com.jcho.backapi.web.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,18 +26,13 @@ public class BoardServiceImpl implements BoardService {
     private BoardRepository boardRepository;
 
     @Autowired
+    private BoardCommentRepository boardCommentRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Override
     public List<BoardDto> getBoardList(Pageable pageable) throws Exception {
-        /*Page<BoardDto> page = boardRepository.findAll(pageable).map(BoardDto::toDto);
-        List<BoardDto> boardDtoList = page.getContent();
-
-        boardDtoList.stream().map(dto -> {
-            dto.setRegUserNm(userRepository.findById(dto.getRegUser()).get().getUserNm());
-            return dto;
-        });*/
-
         List<Board> boards = boardRepository.findByPageable(pageable);
         List<BoardDto> result = boards.stream().map(BoardDto::toDto).collect(Collectors.toList());
 
@@ -83,6 +83,64 @@ public class BoardServiceImpl implements BoardService {
     }
 
     /**
+     * 게시물 댓글 가져오기
+     * @param boardNo
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public List<BoardCommentDto> getBoardCommentList(long boardNo) throws Exception {
+        List<BoardCommentDto> result = boardCommentRepository.getCommentsByBoardNo(boardNo).stream()
+                .map(BoardCommentDto::toDto).collect(Collectors.toList());
+        return result;
+    }
+
+    /**
+     * 게시물 댓글 생성
+     * @param boardCommentDto
+     * @param regUserId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public BoardCommentDto writeBoardComment(BoardCommentDto boardCommentDto, Long regUserId) throws Exception {
+        User regUser = userRepository.findById(regUserId).get();
+        List<BoardComment> comments = boardCommentRepository.getCommentsByBoardNo(boardCommentDto.getBoardNo());
+
+        if(boardCommentDto.isNewComment() && comments.size() != 0){
+            long maxCommentNo = Collections.max(comments
+                    , Comparator.comparingLong(BoardComment::getCommentNo)).getCommentNo();
+
+            boardCommentDto.setCommentNo(maxCommentNo + 1);
+        }
+        BoardComment boardComment = new BoardComment().toEntity(boardCommentDto, regUser);
+        boardCommentRepository.save(boardComment);
+        return BoardCommentDto.toDto(boardComment);
+    }
+
+    /**
+     * 게시물 댓글 삭제
+     * @param boardCommentDto
+     * @param userId
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public boolean deleteBoardComment(BoardCommentDto boardCommentDto, long userId) throws Exception {
+        List<BoardComment> list = boardCommentRepository
+                .findByBoardNoAndCommentNo(boardCommentDto.getBoardNo(), boardCommentDto.getCommentNo());
+        BoardComment boardComment = list.get(0);
+        User regUser = userRepository.findById(userId).get();
+
+        if(checkBoardCommentUser(boardComment, regUser)){
+            boardCommentRepository.delete(boardComment);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
      * 게시물 작성자인지 체크
      * @param board
      * @param currentUser
@@ -90,6 +148,22 @@ public class BoardServiceImpl implements BoardService {
      */
     private boolean checkBoardUser(Board board, User currentUser){
         User regUser = board.getRegUser();
+
+        if(regUser.getUserNo().equals(currentUser.getUserNo())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 댓글 작성자인지 체크
+     * @param boardComment
+     * @param currentUser
+     * @return
+     */
+    private boolean checkBoardCommentUser(BoardComment boardComment, User currentUser){
+        User regUser = boardComment.getRegUser();
 
         if(regUser.getUserNo().equals(currentUser.getUserNo())){
             return true;

@@ -1,94 +1,87 @@
 <template>
-  <table class="boardTable">
-    <thead>
-    <tr>
-      <th style="width: 5%;">No</th>
-      <th style="width: 70%;">제목</th>
-      <th style="width: 15%;">작성자</th>
-      <th style="width: 10%;">작성일자</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-if="checkBoardIsEmpty">
-      <td colspan="4">작성글이 없습니다.</td>
-    </tr>
-    <tr v-else v-for="board in boardList"
-        :key="board.boardNo"
-        @click="viewBoard($event, board.boardNo)">
-      <td>{{ board.boardNo }}</td>
-      <td>{{ board.boardTitle }}</td>
-      <td>{{ board.regUserNm }}</td>
-      <td>{{ board.regDt[0] + '.' + board.regDt[1] + '.' + board.regDt[2] + ' ' + board.regDt[3] + ':' + board.regDt[4] }}</td>
-    </tr>
-    </tbody>
-  </table>
-  <button type="button" v-if="checkLogin" @click="moveBoardWrite">글작성</button>
+  <div class="rank_list">
+    <table class="rankTable">
+      <thead>
+      <tr>
+        <th style="width: 5%;"><img src="/tropi.png" width="30">순위</th>
+        <th style="width: 70%;">유저</th>
+        <th style="width: 15%;">kill</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="rank in rankList"
+          :key="rank.rank">
+        <td>
+          <img v-if="rank.rank == 1" src="/1st-place.png" width="20">
+          <img v-else-if="rank.rank == 2" src="/2st-place.png" width="20">
+          <img v-else-if="rank.rank == 3" src="/3st-place.png" width="20">
+          {{ rank.rank }}
+        </td>
+        <td>{{ rank.userNm }}</td>
+        <td>{{ rank.killCnt }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
-import {isEmpty} from "@/common/commonUtil";
-import {viewBoardList} from "@/api/backend";
+import {viewRankList} from "@/api/backend";
 
 export default {
-  name: "BoardList",
+  name: "RankList",
   data() {
     return {
       total: 0,
-      boardList: [
+      rankList: [
 
       ],
     }
   },
   mounted() {
     // 시작 게시물
-    this.getBoardList(0, 5);
+    this.getRankList(0, 10);
   },
   computed: {
-    checkLogin(){
-      let userNo = this.$store.state.userData;
-      return isEmpty(userNo) == true ? false : true;
-    },
-    checkBoardIsEmpty(){
-      if(this.boardList) return this.boardList.length < 1;
-      else return true;
-    }
+
   },
   methods: {
-    getBoardList(page, size){
-      viewBoardList(page, size).then(response => {
+    getRankList(page, size){
+      viewRankList(page, size).then(response => {
         this.total = response.data.total;
-        this.boardList = response.data;
+        this.rankList = response.data;
       }).catch(error => {
         alert('Error : ' + error);
       });
     },
-    viewBoard(e, boardNo){
-      this.$router.push('/board/view/' + boardNo);
-    },
-    moveBoardWrite(){
-      this.$router.push('/board/write')
+    viewRankDetail(e, userNo){
+      this.$router.push('/rank/view/' + userNo);
     },
   }
 }
 </script>
 
 <style scoped>
-.boardTable {
+.rank_list{
+  width: 70%;
+  margin: 20px 15% 20px 15%;
+}
+.rankTable {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-.boardTable td, .boardTable th {
+.rankTable td, .rankTable th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-.boardTable tr:nth-child(even){background-color: #f2f2f2;}
+.rankTable tr:nth-child(even){background-color: #f2f2f2;}
 
-.boardTable tr:hover {background-color: #ddd;}
+.rankTable tr:hover {background-color: #ddd;}
 
-.boardTable th {
+.rankTable th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
@@ -96,7 +89,7 @@ export default {
   color: white;
 }
 
-.boardTable td {
+.rankTable td {
   text-align: center;
 }
 </style>

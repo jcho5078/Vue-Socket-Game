@@ -9,9 +9,6 @@ import store from "@/store/store";
 import 'vuetify/styles'
 import 'vuetify'
 
-//ckeditor
-import CKEditor from '@ckeditor/ckeditor5-vue'
-
 import App from './App.vue'
 /*import {Phaser, PlayGame, config} from './assets/game'*/
 /*import io from 'socket.io-client';
@@ -37,7 +34,6 @@ router.beforeEach((to, from, next) => {
 });
 
 app.use(router);
-app.use(CKEditor);
 app.use(cookies);
 app.use(store);
 

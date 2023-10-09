@@ -1,15 +1,17 @@
 package com.jcho.backapi.util;
 
+import com.jcho.backapi.BackApiApplication;
 import com.jcho.backapi.common.CommonCode;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
@@ -18,6 +20,8 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtUtil {
+
+    private static Logger logger = BackApiApplication.logger;
 
     /**
      * 토큰 내 유저정보확인
@@ -85,9 +89,20 @@ public class JwtUtil {
      * @param jwtToken
      * @return
      */
-    public static boolean validateToken(String jwtToken) {
+    public static boolean validateToken(String jwtToken) throws Exception {
         jwtToken = getReplaceToken(jwtToken);
-        Claims claims = Jwts.parser().setSigningKey(CommonCode.JWT_KEY.getBytes()).parseClaimsJws(jwtToken).getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts.parser().setSigningKey(CommonCode.JWT_KEY.getBytes()).parseClaimsJws(jwtToken).getBody();
+            logger.info(String.format("userId : %s ", extractUserId(jwtToken)));
+        }catch (SignatureException | MalformedJwtException e) {
+            throw e;
+        } catch (ExpiredJwtException e) {
+            // 유효기간 지남
+            throw e;
+        }catch (Exception e){
+            throw e;
+        }
         return !claims.getExpiration().before(new Date());
     }
 
@@ -104,11 +119,17 @@ public class JwtUtil {
     public static Long getUserIdFromToken(HttpServletRequest request) throws Exception{
         String token = request.getHeader(CommonCode.JWT_HEADER);
         String userId = null;
-        if(token != null
-                && token.startsWith(CommonCode.TOKEN_PREFIX)
-                && validateToken(token)) {
+        try {
+            if(token != null
+                    && token.startsWith(CommonCode.TOKEN_PREFIX)
+                    && validateToken(token)) {
 
-            userId = extractUserId(token);
+                userId = extractUserId(token);
+            }
+        } catch (ExpiredJwtException e) {
+            throw e;
+        } catch (Exception e){
+            throw e;
         }
 
         return Long.parseLong(userId);

@@ -1,7 +1,8 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 import Intro from "@/view/IntroView";
-import RankView from "@/view/board/RankView";
+import RankView from "@/view/rank/RankView";
+import StetView from "@/view/stet/StetView";
 import LoginView from "@/view/login/LoginView";
 import SignUpView from "@/view/login/SignUpView";
 import BoardDetail from "@/components/board/BoardDetail";
@@ -13,11 +14,16 @@ const router = createRouter({
     routes: [
         {
             path: '/',
+            name: 'Intro',
             component: Intro
         },
         {
             path: '/rank',
             component: RankView
+        },
+        {
+            path: '/stet',
+            component: StetView
         },
         {
             path: '/board',

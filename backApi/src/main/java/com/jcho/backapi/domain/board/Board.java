@@ -11,7 +11,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "T_BOARD")
+@Table(name = "T_BOARD", indexes = {
+        @Index(name = "idx_T_BOARD_boardNo", columnList = "BOARD_NO")
+        , @Index(name = "idx_T_BOARD_regUser", columnList = "REG_ID")
+})
 @Getter
 public class Board {
 
@@ -26,7 +29,7 @@ public class Board {
 
     @Comment("게시물 내용")
     @Lob
-    @Column(name = "BOARD_DETAIL", length = 350)
+    @Column(name = "BOARD_DETAIL")
     private String boardDetail;
 
     @Comment("등록일")

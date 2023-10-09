@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "t_user", indexes = {
-        @Index(name = "idx_userNo", columnList = "USER_NO"),
-        @Index(name = "idx_loginId_loginPw", columnList = "LOGIN_ID, LOGIN_PW")
+        @Index(name = "idx_t_user_userNo", columnList = "USER_NO"),
+        @Index(name = "idx_t_user_loginId_loginPw", columnList = "LOGIN_ID, LOGIN_PW")
 })
 @Getter
 @NoArgsConstructor
@@ -29,6 +29,10 @@ public class User {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.userNm = userNm;
+    }
+
+    public User(long userNo){
+        this.userNo = userNo;
     }
 
     @Id

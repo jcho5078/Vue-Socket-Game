@@ -20,7 +20,6 @@ export default {
   name: "ChatForm",
   created() {
     socket.on('connection', socket => {
-      console.log(socket);
       alert("게임서버 연결에 실패했습니다.\n");
     });
     socket.on('chat', (data) => {
@@ -50,10 +49,15 @@ export default {
       this.textarea += msg;
     });
   },
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
+  },
   data() {
     return {
       textarea: '',
       message: '',
+      width: 0,
+      height: 0,
     }
   },
   computed : {
@@ -72,6 +76,15 @@ export default {
     }
   },
   methods: {
+    handleResize(event) {
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      if(this.width < 1332 || this.height < 698){
+        document.querySelector('.chat-box').style.display = 'none';
+      }else{
+        document.querySelector('.chat-box').style.display = 'block';
+      }
+    },
     sendMessage() {
       if(this.message.length == 0) return;
       let data = '';

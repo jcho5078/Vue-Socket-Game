@@ -1,8 +1,9 @@
 package com.jcho.backapi.domain.board;
 
+import com.jcho.backapi.domain.board.cpKey.BoardCommentKey;
 import com.jcho.backapi.domain.user.User;
+import com.jcho.backapi.web.board.dto.BoardCommentDto;
 import com.jcho.backapi.web.board.dto.BoardDto;
-import com.jcho.backapi.web.user.dto.UserDto;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,23 +12,25 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "T_BOARD")
+@Table(name = "T_BOARD_COMMENT")
 @Getter
-public class Board {
+@IdClass(BoardCommentKey.class)
+public class BoardComment {
 
     @Id
     @Column(name = "BOARD_NO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long boardNo;
 
-    @Comment("게시물 제목")
-    @Column(name = "BOARD_TITLE", length = 350)
-    private String boardTitle;
+    @Id
+    @Column(name = "COMMENT_NO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long commentNo;
 
-    @Comment("게시물 내용")
+    @Comment("댓글 내용")
     @Lob
-    @Column(name = "BOARD_DETAIL", length = 350)
-    private String boardDetail;
+    @Column(name = "COMMENT_DETAIL", length = 500)
+    private String commentDetail;
 
     @Comment("등록일")
     @Column(name = "REG_DT", length = 30)
@@ -45,14 +48,14 @@ public class Board {
     private User regUser;
 
     /**
-     * convert board entity
-     * @param boardDto
+     * convert board comment entity
+     * @param boardCommentDto
      * @return
      */
-    public Board toEntity(BoardDto boardDto, User regUser){
-        this.boardNo = boardDto.getBoardNo();
-        this.boardTitle = boardDto.getBoardTitle();
-        this.boardDetail = boardDto.getBoardDetail();
+    public BoardComment toEntity(BoardCommentDto boardCommentDto, User regUser){
+        this.boardNo = boardCommentDto.getBoardNo();
+        this.commentNo = boardCommentDto.getCommentNo();
+        this.commentDetail = boardCommentDto.getCommentDetail();
         this.regDt = LocalDateTime.now();
         this.modDt = LocalDateTime.now();
         this.regUser = regUser;

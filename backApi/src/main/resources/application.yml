@@ -16,7 +16,16 @@ spring:
       #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
     generate-ddl: true
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: socket
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 front-server:
   local-url: http://localhost:8081
   container-url: http://localhost
+  socket-url: http://localhost:3000
+  cloud-server: http://ec2-13-125-51-108.ap-northeast-2.compute.amazonaws.com/

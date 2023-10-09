@@ -1,18 +1,27 @@
 package com.jcho.backapi.domain.board;
 
-import org.springframework.data.domain.Page;
+import com.jcho.backapi.domain.board.cpKey.BoardCommentKey;
+import com.jcho.backapi.domain.user.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardCommentRepository extends JpaRepository<BoardComment, BoardCommentKey> {
 
-    /*public Page<Board> findByBoardOrderByBoardNoDesc(Board board, Pageable pageable);
+    @Query("SELECT c, u " +
+            "FROM BoardComment c INNER JOIN c.regUser u " +
+            "WHERE c.boardNo = :boardNo " +
+            "ORDER BY c.commentNo")
+    public List<BoardComment> getCommentsByBoardNo(Long boardNo);
 
-    public Board findByBoardNo(Board board);*/
+    @Query("SELECT c, u " +
+            "FROM BoardComment c INNER JOIN c.regUser u " +
+            "WHERE c.boardNo = :boardNo " +
+            "   AND c.commentNo = :commentNo ")
+    public List<BoardComment> findByBoardNoAndCommentNo(Long boardNo, Long commentNo);
 
-    @Query(value = "SELECT bd FROM Board bd join fetch bd.regUser")
-    public List<Board> findByPageable(Pageable pageable);
+    public List<BoardComment> findByRegUser(User user);
 }

@@ -33,7 +33,6 @@ export default {
     doSignUp(){
       signUp(this.userData).then(response => {
 
-        console.log(this.response);
         if(response.status != 200){
           alert('Error : ' + response.data.msg);
         }else{

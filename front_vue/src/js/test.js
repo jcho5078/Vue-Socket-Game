@@ -49,8 +49,6 @@ class Demo extends Phaser.Scene
 
     init (data)
     {
-        console.log('init', data);
-
         this.imageID = data.id;
         this.imageFile = data.image;
     }

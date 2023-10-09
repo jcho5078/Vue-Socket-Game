@@ -1,5 +1,5 @@
 <template>
-  <div id="rankDiv">
+  <div id="stetDiv">
 
   </div>
 </template>
@@ -8,7 +8,7 @@
 // eslint-disable-next-line no-unused-vars
 
 export default {
-  name: "RankView",
+  name: "StetView",
   created() {
 
   },

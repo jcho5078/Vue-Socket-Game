@@ -1,23 +1,38 @@
 <template>
   <div class="v-container">
     <div class="header-left">
-      <h3 class="title-logo" @click="moveIntro">Test Project</h3>
+      <a class="navbar-brand" @click="moveIntro">
+            <span>
+              Combat Space
+            </span>
+      </a>
     </div>
 
     <div class="header-center">
-<!--      <button @click="moveGame">Move to Game</button>-->
-      <button @click="moveBoard">게시판</button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav  mx-auto ">
+          <li class="nav-item active">
+            <a class="nav-link" @click="moveBoard">커뮤니티 </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" @click="moveRank">랭킹 </a>
+          </li>
+<!--      <li class="nav-item active">
+            <a class="nav-link" @click="moveStatistic">통계 </a>
+          </li>-->
+        </ul>
+      </div>
     </div>
 
     <div class="header-right">
       <div class="userInfoDiv" v-if="getUserData.userNm != null ? true : false">
-        <p class="userNm">유저 : {{getUserData.userNm != null ? getUserData.userNm : ''}}</p>
-        <button @click="getUserInfo">유저 데이터 확인</button>
+<!--    <p class="userNm">유저 : {{getUserData.userNm != null ? getUserData.userNm : ''}}</p>
+        <button @click="getUserInfo">유저 데이터 확인</button>-->
         <button @click="doLogout">logout</button>
       </div>
       <div class="userInfoDiv" v-else>
-        <button @click="moveLogin">Move to Login</button>
-        <button @click="moveSignUp">Move to SignUp</button>
+        <button @click="moveLogin">Sign In</button>
+        <button @click="moveSignUp">Sign Up</button>
       </div>
     </div>
   </div>
@@ -59,7 +74,7 @@ export default {
     },
     doLogout(){
       this.$store.commit('resetUserData');
-      location.reload();
+      this.$router.push('/');
     },
     moveIntro(){
       this.$router.push('/');
@@ -69,6 +84,12 @@ export default {
     },
     moveBoard(){
       this.$router.push('/board');
+    },
+    moveRank(){
+      this.$router.push('/rank');
+    },
+    moveStatistic(){
+      this.$router.push('/stet');
     },
     moveLogin(){
       this.$router.push('/user/login')
@@ -81,17 +102,12 @@ export default {
 </script>
 
 <style scoped>
+
 .v-container {
   padding: 10px 0px 10px 0px;
-  margin: 10px;
   border-bottom: 1px solid #ebebeb;
   display: flex;
-}
-
-.title-logo:hover {
-  cursor:pointer;
-  transition: transform 0.2s linear;
-  transform: scale(1.1);
+  background-color: black;
 }
 
 .header-left {
@@ -124,5 +140,58 @@ export default {
   padding: 2px 4px;
   margin: 5px;
 }
+.navbar-nav .nav-item .nav-link {
+  padding: 5px 20px;
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: 5px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
 
+.navbar-nav .nav-item:hover .nav-link, .navbar-nav .nav-item .active .nav-link {
+  color: #ffbe33;
+}
+
+.navbar-brand {
+  font-family: 'Dancing Script', cursive;
+}
+
+.navbar-brand span {
+  font-weight: bold;
+  font-size: 32px;
+  color: #ffffff;
+}
+.navbar-brand:hover {
+  cursor:pointer;
+  transition: transform 0.1s linear;
+  transform: scale(1.1);
+}
+
+ul {
+  list-style: none;
+}
+ul li {
+  float: left;
+}
+ul li:hover {
+  cursor:pointer;
+}
+
+button {
+  display: inline-block;
+  padding: 8px 30px;
+  background-color: #ffbe33;
+  color: #ffffff;
+  border-radius: 45px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  border: none;
+}
+
+button:hover {
+  background-color: #e69c00;
+  padding: 8px 30px;
+}
 </style>

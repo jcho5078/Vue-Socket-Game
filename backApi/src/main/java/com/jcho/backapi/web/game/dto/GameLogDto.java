@@ -15,13 +15,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class GameLogDto implements Serializable {
     private long userNo;
+    private String userNm;
     private long killedUserNo;
+    private String killedUserNm;
+    private long killCnt;
     private LocalDateTime killDt;
 
     public static GameLogDto toDto(GameLog gameLog){
         return GameLogDto.builder()
-                .userNo(gameLog.getUserNo().getUserNo())
-                .killedUserNo(gameLog.getKilledUserNo().getUserNo())
+                .userNo(gameLog.getUser().getUserNo())
+                .userNm(gameLog.getUser().getUserNm())
+                .killedUserNo(gameLog.getKilledUser().getUserNo())
+                .killedUserNm(gameLog.getKilledUser().getUserNm())
                 .killDt(gameLog.getKillDt())
                 .build();
     }

@@ -13,7 +13,7 @@ module.exports = defineConfig({
         changeOrigin: true
       },
       socket: {
-        target: process.env.VUE_APP_SOCKET_ENDPOINT,
+        target: "http://localhost:3000",
         ws: true,
         changeOrigin: true
       }

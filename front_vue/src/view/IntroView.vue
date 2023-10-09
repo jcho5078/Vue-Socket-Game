@@ -1,14 +1,20 @@
 <template>
-  <h4 id="wellcome" v-if="getUserData.userNm != null ? true : false">WellCome, {{getUserData.userNm != null ? getUserData.userNm : ''}}!</h4>
-  <a class="moveLogin" @click="moveLogin" v-else>Sign In</a>
+  <div class="page_nm">
+    <h4 id="wellcome" v-if="getUserData.userNm != null ? true : false">WellCome, {{getUserData.userNm != null ? getUserData.userNm : ''}}!</h4>
+    <h4 class="moveLogin" @click="moveLogin" v-else>Sign In</h4>
+  </div>
+  <chat-form/>
 </template>
 
 <script>
 import {Phaser, PlayGame, config} from '@/js/game';
 import {isEmpty} from "@/common/commonUtil";
 
+import ChatForm from "@/components/chat/ChatForm";
+
 export default {
   name: "IntroView",
+  components: {ChatForm},
   data() {
     return {
       textarea: '',
@@ -37,19 +43,27 @@ export default {
     config.scene = [gameScene];
     const GameData = new Phaser.Game(config);
     document.querySelector('canvas').style.position = 'absolute';
-    document.querySelector('canvas').style.left = '15%';
+    document.querySelector('canvas').style.left = '20%';
     document.querySelector('canvas').style.margin = '10px';
     document.querySelector('canvas').style.padding = '10px';
     document.querySelector('canvas').style.border = '0.5px ridge black';
 
-    //const gameView = document.querySelector('canvas');
-    //document.getElementById('gameDiv').appendChild(gameView);
-    //this.showGame();
-
-    //GameData.pause();
-    //GameData.onHidden();
+    if(this.$route.query.isDoLogin){
+      // vue phaser 버그 수정
+      const baseUrl = window.location.protocol + '//' + window.location.host;
+      location.href = baseUrl + '/';
+    }
   },
-  beforeUnmount() {
+  beforeMount() {
+    window.onkeydown = (e) => {
+      if(e.key == 'Control' && document.querySelector('msg-chat') != null){
+        var chatFocus = document.getElementById('msg-chat');
+        chatFocus.focus();
+        chatFocus.value = '';
+      }
+    }
+  },
+  unmounted() {
     this.hideGame();
   },
   methods: {
@@ -75,7 +89,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped>\
   .moveLogin {
     color: darkblue;
   }

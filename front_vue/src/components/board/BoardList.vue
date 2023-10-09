@@ -1,28 +1,30 @@
 <template>
-  <table class="boardTable">
-    <thead>
-    <tr>
-      <th style="width: 5%;">No</th>
-      <th style="width: 70%;">제목</th>
-      <th style="width: 15%;">작성자</th>
-      <th style="width: 10%;">작성일자</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-if="checkBoardIsEmpty">
-      <td colspan="4">작성글이 없습니다.</td>
-    </tr>
-    <tr v-else v-for="board in boardList"
-        :key="board.boardNo"
-        @click="viewBoard($event, board.boardNo)">
-      <td>{{ board.boardNo }}</td>
-      <td>{{ board.boardTitle }}</td>
-      <td>{{ board.regUserNm }}</td>
-      <td>{{ board.regDt[0] + '.' + board.regDt[1] + '.' + board.regDt[2] + ' ' + board.regDt[3] + ':' + board.regDt[4] }}</td>
-    </tr>
-    </tbody>
-  </table>
-  <button type="button" v-if="checkLogin" @click="moveBoardWrite">글작성</button>
+  <div class="board_list">
+    <table class="boardTable">
+      <thead>
+      <tr>
+        <th style="width: 5%;">No</th>
+        <th style="width: 70%;">제목</th>
+        <th style="width: 15%;">작성자</th>
+        <th style="width: 10%;">작성일자</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-if="checkBoardIsEmpty">
+        <td colspan="4">작성글이 없습니다.</td>
+      </tr>
+      <tr v-else v-for="board in boardList"
+          :key="board.boardNo"
+          @click="viewBoard($event, board.boardNo)">
+        <td>{{ board.boardNo }}</td>
+        <td>{{ board.boardTitle }}</td>
+        <td>{{ board.regUserNm }}</td>
+        <td>{{ board.regDt[0] + '.' + board.regDt[1] + '.' + board.regDt[2] + ' ' + board.regDt[3] + ':' + board.regDt[4] }}</td>
+      </tr>
+      </tbody>
+    </table>
+    <button type="button" v-if="checkLogin" @click="moveBoardWrite">글작성</button>
+  </div>
 </template>
 
 <script>
@@ -45,7 +47,8 @@ export default {
   },
   computed: {
     checkLogin(){
-      return isEmpty(localStorage.userToken) == false;
+      let userNo = this.$store.state.userData;
+      return isEmpty(userNo) == true ? false : true;
     },
     checkBoardIsEmpty(){
       if(this.boardList) return this.boardList.length < 1;
@@ -72,6 +75,10 @@ export default {
 </script>
 
 <style scoped>
+.board_list{
+  width: 70%;
+  margin: 20px 15% 20px 15%;
+}
 .boardTable {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;

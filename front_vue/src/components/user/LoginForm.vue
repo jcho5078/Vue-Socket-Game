@@ -2,10 +2,12 @@
   <div class="signUpForm">
     <form @submit.prevent="doLogin">
       <div class="input_div">
-        ID:<input type="text" id="loginId" v-model="loginData.loginId">
+        <label for="loginId">ID </label>
+        <input type="text" id="loginId" v-model="loginData.loginId">
       </div>
       <div class="input_div">
-        PW:<input type="password" id="loginPw" v-model="loginData.loginPw">
+        <label for="loginPw">PW </label>
+        <input type="password" id="loginPw" v-model="loginData.loginPw">
       </div>
       <button type="submit">로그인</button>
     </form>
@@ -38,15 +40,16 @@ export default {
             && (isEmpty(response.data.responseDto.toString()) || isEmpty(response.data.responseDto.jwtToken))){
           alert('ID, PW가 틀립니다.');
         }else{
-          console.log(response.data.responseDto.jwtToken);
           const userData = response.data.responseDto;
           localStorage.setItem('localUserData', JSON.stringify(userData));
           this.$store.commit('callUserDataLocalStorage');
 
 
           localStorage.setItem('userToken', response.data.responseDto.jwtToken);
-          console.log("userToken in localStroage : " + localStorage.getItem("userToken"));
-          this.$router.push('/');
+          this.$router.push({
+            name: 'Intro',
+            query: {isDoLogin: true},
+          });
         }
       }).catch(error => {
         alert('로그인 실패: ' + error);
