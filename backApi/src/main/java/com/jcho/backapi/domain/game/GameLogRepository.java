@@ -14,6 +14,6 @@ public interface GameLogRepository extends JpaRepository<GameLog, Long> {
             "FROM t_game_log l join t_user u " +
             "WHERE l.user_no = u.user_no " +
             "group by l.user_no, u.user_nm " +
-            "order by rank desc", nativeQuery = true)
+            "order by rank", nativeQuery = true)
     public List<GameLogDtoForNq> getGameLogList();
 }
