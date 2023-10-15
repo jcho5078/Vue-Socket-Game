@@ -5,7 +5,7 @@
 ![game](https://github.com/jcho5078/vue-game/assets/60742556/6feac397-c5ed-41dc-8636-f47b145266e9)
 
 
-## Project setup
+## Local Project setup
 
 ### backend build
 ```
