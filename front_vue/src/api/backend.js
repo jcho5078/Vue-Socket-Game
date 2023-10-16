@@ -6,8 +6,8 @@ let connect = axios.create({
         'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET', 'withCredentials' : true,
         "Authorization": 'Bearer '+localStorage.userToken,
     },
-    /*baseURL: "http://localhost:8080"*/
-    baseURL: "http://ec2-43-202-152-242.ap-northeast-2.compute.amazonaws.com:8080"
+    baseURL: "http://localhost:8080"
+    /*baseURL: "http://ec2-43-202-152-242.ap-northeast-2.compute.amazonaws.com:8080"*/
 });
 
 connect.interceptors.response.use(function (response) {
