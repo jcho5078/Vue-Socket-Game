@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -90,8 +91,13 @@ public class BoardServiceImpl implements BoardService {
      */
     @Override
     public List<BoardCommentDto> getBoardCommentList(long boardNo) throws Exception {
-        List<BoardCommentDto> result = boardCommentRepository.getCommentsByBoardNo(boardNo).stream()
-                .map(BoardCommentDto::toDto).collect(Collectors.toList());
+        List<BoardComment> boardComments = boardCommentRepository.getCommentsByBoardNo(boardNo);
+        List<BoardCommentDto> result = new ArrayList<>();
+        if(!boardComments.isEmpty()){
+            result = boardComments.stream()
+                    .map(BoardCommentDto::toDto).collect(Collectors.toList());
+        }
+
         return result;
     }
 

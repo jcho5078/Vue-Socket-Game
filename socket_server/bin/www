@@ -7,6 +7,9 @@
 var app = require('../app');
 var debug = require('debug')('socket-server:server');
 var http = require('http');
+const dotenv = require('dotenv');
+dotenv.config();
+
 const {Server} = require("socket.io");
 
 const { Kafka } = require('kafkajs')
@@ -38,7 +41,7 @@ run('nothing').catch(console.error)
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort('3000');
 app.set('port', port);
 
 /**
@@ -53,15 +56,14 @@ var io = require('socket.io')(server, {
   allowEIO3: true,
 });
 
-server.listen(port);
+server.listen(3000, '0.0.0.0');
 var players = {};
 var bullets = {};
 
 /**
  * logic
  */
-io.on('connection', socket => {
-  console.log(socket.nsp.sockets);
+io.socket.on('connection', socket => {
 
   /**
    * chat

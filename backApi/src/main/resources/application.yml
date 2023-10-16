@@ -18,7 +18,7 @@ spring:
     generate-ddl: true
   kafka:
     consumer:
-      bootstrap-servers: localhost:29092
+      bootstrap-servers: ec2-3-37-230-102.ap-northeast-2.compute.amazonaws.com:29092
       group-id: socket
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -28,4 +28,4 @@ front-server:
   local-url: http://localhost:8081
   container-url: http://localhost
   socket-url: http://localhost:3000
-  cloud-server: ec2-3-37-230-102.ap-northeast-2.compute.amazonaws.com/
+  cloud-server: http://ec2-3-37-230-102.ap-northeast-2.compute.amazonaws.com

@@ -6,7 +6,8 @@ let connect = axios.create({
         'Access-Control-Allow-Methods': 'PUT, POST, PATCH, DELETE, GET', 'withCredentials' : true,
         "Authorization": 'Bearer '+localStorage.userToken,
     },
-    baseURL: "http://localhost:8080"
+    /*baseURL: "http://localhost:8080"*/
+    baseURL: "http://ec2-43-202-152-242.ap-northeast-2.compute.amazonaws.com:8080"
 });
 
 connect.interceptors.response.use(function (response) {
@@ -15,6 +16,7 @@ connect.interceptors.response.use(function (response) {
     console.log(error);
     if(error.response.data.message.indexOf('JWT expired at') != -1 || error.response.status == 401){
         if (window.confirm("로그인 만료")) {
+            localStorage.removeItem("localUserData");
             location.href = '/';
         }
     }

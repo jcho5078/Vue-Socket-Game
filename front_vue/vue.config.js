@@ -8,7 +8,7 @@ module.exports = defineConfig({
     },
     proxy: {
       backend: {
-        target: 'http://localhost:8080/',
+        target: 'http://ec2-43-202-152-242.ap-northeast-2.compute.amazonaws.com:8080/',
         ws: true,
         changeOrigin: true
       },

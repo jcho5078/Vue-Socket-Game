@@ -9,13 +9,13 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="rank in rankList"
-          :key="rank.rank">
+      <tr v-for="(rank, idx) in rankList"
+          :key="idx">
         <td>
-          <img v-if="rank.rank == 1" src="/1st-place.png" width="20">
-          <img v-else-if="rank.rank == 2" src="/2st-place.png" width="20">
-          <img v-else-if="rank.rank == 3" src="/3st-place.png" width="20">
-          {{ rank.rank }}
+          <img v-if="idx == 0" src="/1st-place.png" width="20">
+          <img v-else-if="idx == 1" src="/2st-place.png" width="20">
+          <img v-else-if="idx == 2" src="/3st-place.png" width="20">
+          {{ idx+1 }}
         </td>
         <td>{{ rank.userNm }}</td>
         <td>{{ rank.killCnt }}</td>
@@ -50,6 +50,13 @@ export default {
       viewRankList(page, size).then(response => {
         this.total = response.data.total;
         this.rankList = response.data;
+
+        this.rankList.sort((a, b) => {
+          if(a.killCnt > b.killCnt) return -1;
+          if(a.killCnt < b.killCnt) return  1;
+          return 0;
+        });
+        console.log(JSON.stringify(this.rankList));
       }).catch(error => {
         alert('Error : ' + error);
       });
