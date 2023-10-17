@@ -1,9 +1,5 @@
 # Vue-Spring
 
-## Introduce
-
-![image3](https://github.com/jcho5078/vue-game/assets/60742556/69c08903-f92c-4cb1-ac12-9fb051ee618b)
-
 
 ## Local Project setup
 
@@ -17,3 +13,7 @@ mvn package
 ```
 docker-compose up -d
 ``` 
+
+## Introduce
+
+[![image3](https://github.com/jcho5078/vue-game/assets/60742556/47ad451b-8583-4d95-a24c-bf5c57add7e9)](https://github.com/jcho5078/vue-game/blob/main/image3.gif)
