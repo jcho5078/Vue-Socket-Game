@@ -2,7 +2,7 @@
 
 ## Introduce
 
-![game](https://github.com/jcho5078/vue-game/assets/60742556/6feac397-c5ed-41dc-8636-f47b145266e9)
+![image3](https://github.com/jcho5078/vue-game/assets/60742556/69c08903-f92c-4cb1-ac12-9fb051ee618b)
 
 
 ## Local Project setup
