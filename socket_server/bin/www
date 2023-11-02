@@ -63,7 +63,7 @@ var bullets = {};
 /**
  * logic
  */
-io.socket.on('connection', socket => {
+io.on('connection', socket => {
 
   /**
    * chat
